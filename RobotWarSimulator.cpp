@@ -1,9 +1,21 @@
+/**********|**********|**********|
+Program: RobotWarSimulator.cpp
+Course: OOPDS
+Trimester: 2510
+Name: Sharveeny
+ID: 242UC241DD
+Lecture Section: TC1L
+Tutorial Section: TT2L
+Email: SHARVEENY.KALAI.KUMAR@student.mmu.edu.my
+Phone: 0174081106
+***********|**********|**********/
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include "Robot.h"
+#include "robot.h"
 using namespace std;
 
 const int M = 20; // Rows
@@ -16,8 +28,9 @@ vector<Robot*> robots;
 
 class GenericRobot : public Robot {
 public:
-    GenericRobot(string n, int xPos, int yPos) : Robot(n, xPos, yPos) {
-        battlefield[x][y] = name[0];
+    GenericRobot(string n, int xPos, int yPos)
+        : Robot(n, xPos, yPos, N, M) {
+        battlefield[xPos][yPos] = name[0];
     }
 
     void think() override {}
@@ -29,32 +42,34 @@ public:
     void move() override {
         int dx = rand() % 3 - 1;
         int dy = rand() % 3 - 1;
-        int newX = x + dx, newY = y + dy;
+        int newX = pos.robotPositionX + dx;
+        int newY = pos.robotPositionY + dy;
         if (newX >= 0 && newX < M && newY >= 0 && newY < N && battlefield[newX][newY] == '.') {
-            battlefield[x][y] = '.';
-            x = newX; y = newY;
-            battlefield[x][y] = name[0];
-            cout << name << " moved to (" << x << "," << y << ").\n";
+            battlefield[pos.robotPositionX][pos.robotPositionY] = '.';
+            pos.robotPositionX = newX;
+            pos.robotPositionY = newY;
+            battlefield[pos.robotPositionX][pos.robotPositionY] = name[0];
+            cout << name << " moved to (" << newX << "," << newY << ").\n";
         }
     }
 
     void fire() override {
         if (shells <= 0) {
-            destroy();
-            battlefield[x][y] = '.';
-            cout << name << " ran out of shells and self-destructed.\n";
+            handleDeath();
             return;
         }
         int dx = rand() % 3 - 1;
         int dy = rand() % 3 - 1;
-        int tx = x + dx;
-        int ty = y + dy;
+        int tx = pos.robotPositionX + dx;
+        int ty = pos.robotPositionY + dy;
         if ((dx != 0 || dy != 0) && tx >= 0 && tx < M && ty >= 0 && ty < N) {
             for (Robot* r : robots) {
-                if (r->alive() && r != this && tx == r->getX() && ty == r->getY()) {
+                if (r->isLives() && r != this &&
+                    tx == r->getPosition().robotPositionX &&
+                    ty == r->getPosition().robotPositionY) {
+
                     if ((rand() % 100) < 70) {
-                        r->destroy();
-                        battlefield[tx][ty] = '.';
+                        r->takeDamage(100);
                         cout << name << " fired and hit " << r->getName() << "!\n";
                     } else {
                         cout << name << " fired and missed.\n";
@@ -64,6 +79,22 @@ public:
             }
         }
         shells--;
+    }
+
+    void handleDeath() {
+        battlefield[pos.robotPositionX][pos.robotPositionY] = '.';
+        lives--;
+        if (lives > 0) {
+            cout << name << " is respawning...\n";
+            Position newPos = findRandomEmptyPosition(M, N, battlefield);
+            pos = newPos;
+            health = 100;
+            shells = 10;
+            battlefield[pos.robotPositionX][pos.robotPositionY] = name[0];
+        } else {
+            alive = false;
+            cout << name << " has been destroyed.\n";
+        }
     }
 
     void displayAction() override {
@@ -87,7 +118,7 @@ void simulate() {
         displayBattlefield();
 
         for (Robot* r : robots) {
-            if (r->alive()) {
+            if (r->isLives()) {
                 r->displayAction();
                 r->think();
                 r->look();
@@ -97,7 +128,7 @@ void simulate() {
         }
 
         int aliveCount = 0;
-        for (Robot* r : robots) if (r->alive()) aliveCount++;
+        for (Robot* r : robots) if (r->isLives()) aliveCount++;
         if (aliveCount <= 1) break;
     }
     cout << "\nSimulation Ended.\n";
