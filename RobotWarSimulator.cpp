@@ -26,12 +26,6 @@ class Robot; // Forward declaration
 vector<vector<char>> battlefield(M, vector<char>(N, '.'));
 vector<Robot*> robots;
 
-// Define Position struct (if not already in robot.h)
-struct Position {
-    int robotPositionX;
-    int robotPositionY;
-};
-
 // Utility function to find a random empty position
 Position findRandomEmptyPosition(int rows, int cols, const vector<vector<char>>& battlefield) {
     Position pos;
