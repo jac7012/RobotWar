@@ -1,7 +1,7 @@
 #ifndef FIREROBOT_H
 #define FIREROBOT_H
 
-#include "robot.h"
+#include "newrobot.h"
 #include "Battlefield.h"
 
 #include <iostream>

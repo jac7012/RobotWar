@@ -15,17 +15,34 @@ Phone: 0174081106
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include "robot.h"
+#include "newrobot.h"
 using namespace std;
 
 const int M = 20; // Rows
 const int N = 40; // Columns
 const int MAX_STEPS = 100;
 
-class Robot;
+class Robot; // Forward declaration
 vector<vector<char>> battlefield(M, vector<char>(N, '.'));
 vector<Robot*> robots;
 
+// Define Position struct (if not already in robot.h)
+struct Position {
+    int robotPositionX;
+    int robotPositionY;
+};
+
+// Utility function to find a random empty position
+Position findRandomEmptyPosition(int rows, int cols, const vector<vector<char>>& battlefield) {
+    Position pos;
+    do {
+        pos.robotPositionX = rand() % rows;
+        pos.robotPositionY = rand() % cols;
+    } while (battlefield[pos.robotPositionX][pos.robotPositionY] != '.');
+    return pos;
+}
+
+// GenericRobot class
 class GenericRobot : public Robot {
 public:
     GenericRobot(string n, int xPos, int yPos)
@@ -102,6 +119,7 @@ public:
     }
 };
 
+// Display the battlefield
 void displayBattlefield() {
     cout << "\nBattlefield:\n";
     for (int i = 0; i < M; ++i) {
@@ -112,6 +130,7 @@ void displayBattlefield() {
     }
 }
 
+// Main simulation loop
 void simulate() {
     for (int step = 0; step < MAX_STEPS; ++step) {
         cout << "\n--- Turn " << step + 1 << " ---\n";

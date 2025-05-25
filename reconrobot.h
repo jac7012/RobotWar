@@ -1,6 +1,6 @@
 #ifndef reconrobot_h
 #define reconrobot_h
-#include robot.h
+#include newrobot.h
 
 #include <iostream>
 #include <cstdlib>
