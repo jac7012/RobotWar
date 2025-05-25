@@ -332,5 +332,14 @@ class ThinkingRobot: virtual public Robot
        }
 };
 
+// Respawn queue logic support
+inline Position findRandomEmptyPosition(int width, int height, const std::vector<std::vector<char>>& grid) {
+    Position pos;
+    do {
+        pos.robotPositionX = rand() % width;
+        pos.robotPositionY = rand() % height;
+    } while (grid[pos.robotPositionX][pos.robotPositionY] != '.');
+    return pos;
+}
 
 #endif
