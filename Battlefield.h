@@ -17,6 +17,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+using namespace std;
 
 // This class represents the battlefield grid where robots will be placed and move around
 class Battlefield {
@@ -37,7 +38,7 @@ public:
     void moveRobot(int oldX, int oldY, int newX, int newY);
 
     // Logs the results or final state of the battlefield to a file
-    void logResults(const std::string& filename) const;
+    void logResults(const string& filename) const;
 
     // Getter for battlefield width
     int getWidth() const;
@@ -45,12 +46,18 @@ public:
     // Getter for battlefield height
     int getHeight() const;
 
+    //for upgrades
+    Robot* getRobotAt(int x, int y); 
+    bool isValidMove(const Position& pos);
+    void revealAllToRobot(Robot* robot);
+    Robot* getRobotByName(const string& name);
+
 private:
     int width;  // Width of the battlefield grid (number of columns)
     int height; // Height of the battlefield grid (number of rows)
 
     // 2D grid representing the battlefield. Each cell holds a character (e.g., '.', 'A', 'B')
-    std::vector<std::vector<char>> grid;
+    vector<std::vector<char>> grid;
 };
 
 #endif
