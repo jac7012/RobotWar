@@ -1,5 +1,5 @@
-#ifndef SUPPORTROBOT_H
-#define SUPPORTROBOT_H
+#ifndef SCOUTROBOT_H
+#define SCOUTROBOT_H
 
 #include "newrobot.h"
 #include "Battlefield.h"
