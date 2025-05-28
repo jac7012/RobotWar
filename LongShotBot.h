@@ -63,10 +63,6 @@ public:
         HideBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide" << endl;
         LongShotBot::displayStats();
@@ -87,17 +83,12 @@ public:
         ScoutBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout" << endl;
         LongShotBot::displayStats();
         ScoutBot::displayStats();
     }
 };
-
 
 // LongShot + Jump
 class LongShotJumpBot : public virtual LongShotBot, public virtual JumpBot {
@@ -110,11 +101,6 @@ public:
     void think() override {
         LongShotBot::think();
         JumpBot::think();
-    }
-
-    // Fix ambiguity by explicitly overriding fire()
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
     }
 
     void displayStats() const override {
@@ -137,10 +123,6 @@ public:
         TrackBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track" << endl;
         LongShotBot::displayStats();
@@ -161,11 +143,6 @@ public:
         LongShotBot::think();
         JumpBot::think();
         TrackBot::think();
-    }
-
-    // Explicitly resolve fire() ambiguity
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
     }
 
     void displayStats() const override {
@@ -191,10 +168,6 @@ public:
         ScoutBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide + Scout" << endl;
         LongShotBot::displayStats();
@@ -216,10 +189,6 @@ public:
         LongShotBot::think();
         HideBot::think();
         TrackBot::think();
-    }
-
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
     }
 
     void displayStats() const override {
@@ -245,10 +214,6 @@ public:
         ScoutBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump + Scout" << endl;
         LongShotBot::displayStats();
@@ -270,10 +235,6 @@ public:
         LongShotBot::think();
         ScoutBot::think();
         HideBot::think();
-    }
-
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
     }
 
     void displayStats() const override {
@@ -299,10 +260,6 @@ public:
         HideBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track + Hide" << endl;
         LongShotBot::displayStats();
@@ -324,10 +281,6 @@ public:
         LongShotBot::think();
         TrackBot::think();
         JumpBot::think();
-    }
-
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
     }
 
     void displayStats() const override {
@@ -353,10 +306,6 @@ public:
         JumpBot::think();
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
-    }
-
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout + Jump" << endl;
         LongShotBot::displayStats();
@@ -364,5 +313,7 @@ public:
         JumpBot::displayStats();
     }
 };
+
+
 
 #endif
