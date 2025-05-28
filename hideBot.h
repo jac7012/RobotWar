@@ -7,6 +7,7 @@
 #include "ThirtyShotBot.h"
 #include "ScoutBot.h"
 #include "TrackBot.h"
+#include "JumpBot.h"
 
 class HideBot : public virtual GenericRobot {
 private:
