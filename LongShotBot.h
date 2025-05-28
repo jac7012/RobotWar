@@ -6,6 +6,8 @@
 #include "TrackBot.h"
 #include "ThirtyShotBot.h"
 #include "SemiAutoBot.h"
+#include "ScoutBot.h"
+#include "HideBot.h"
 
 class LongShotBot : public virtual GenericRobot {
 public:
