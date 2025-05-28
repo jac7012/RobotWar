@@ -31,7 +31,7 @@ public:
                 if (target != nullptr && target->isLives()) {
                     target->takeDamage(damage);
                     cout << "Hit " << target->getName() 
-                         << " with burst shot for " << damage << " damage.\n";
+                         << " with burst shot\n";
                 }
             }
         }
