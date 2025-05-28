@@ -159,4 +159,60 @@ public:
     }
 };
 
+// SemiAuto + Track + Hide
+class SemiAutoTrackHideBot : public virtual SemiAutoBot, public virtual TrackBot, public virtual HideBot {
+public:
+    SemiAutoTrackHideBot(const string& name, int x, int y, int w, int h)
+        : GenericRobot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h), TrackBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
+    void think() override { SemiAutoBot::think(); TrackBot::think(); HideBot::think(); }
+    void displayStats() const override {
+        cout << "Upgrade: SemiAuto + Track + Hide" << endl;
+        SemiAutoBot::displayStats();
+        TrackBot::displayStats();
+        HideBot::displayStats();
+    }
+};
+
+// SemiAuto + Track + Jump
+class SemiAutoTrackJumpBot : public virtual SemiAutoBot, public virtual TrackBot, public virtual JumpBot {
+public:
+    SemiAutoTrackJumpBot(const string& name, int x, int y, int w, int h)
+        : GenericRobot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h), TrackBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
+    void think() override { SemiAutoBot::think(); TrackBot::think(); JumpBot::think(); }
+    void displayStats() const override {
+        cout << "Upgrade: SemiAuto + Track + Jump" << endl;
+        SemiAutoBot::displayStats();
+        TrackBot::displayStats();
+        JumpBot::displayStats();
+    }
+};
+
+// SemiAuto + Scout + Hide
+class SemiAutoScoutHideBot : public virtual SemiAutoBot, public virtual ScoutBot, public virtual HideBot {
+public:
+    SemiAutoScoutHideBot(const string& name, int x, int y, int w, int h)
+        : GenericRobot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h), ScoutBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
+    void think() override { SemiAutoBot::think(); ScoutBot::think(); HideBot::think(); }
+    void displayStats() const override {
+        cout << "Upgrade: SemiAuto + Scout + Hide" << endl;
+        SemiAutoBot::displayStats();
+        ScoutBot::displayStats();
+        HideBot::displayStats();
+    }
+};
+
+// SemiAuto + Scout + Jump
+class SemiAutoScoutJumpBot : public virtual SemiAutoBot, public virtual ScoutBot, public virtual JumpBot {
+public:
+    SemiAutoScoutJumpBot(const string& name, int x, int y, int w, int h)
+        : GenericRobot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h), ScoutBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
+    void think() override { SemiAutoBot::think(); ScoutBot::think(); JumpBot::think(); }
+    void displayStats() const override {
+        cout << "Upgrade: SemiAuto + Scout + Jump" << endl;
+        SemiAutoBot::displayStats();
+        ScoutBot::displayStats();
+        JumpBot::displayStats();
+    }
+};
+
 #endif
