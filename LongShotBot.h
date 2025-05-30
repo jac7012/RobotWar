@@ -1,3 +1,15 @@
+/**********|**********|**********|
+ Program: longShotBot.h
+ Course: OOPDS
+ Trimester: 2510
+ Name: Lim E Jac
+ ID: 242UC245BG
+ Lecture Section: TC1L
+ Tutorial Section: TT2L
+ Email: LIM.E.JAC@student.mmu.edu.my
+ Phone: 017-7026113
+ **********|**********|**********/
+
 #ifndef LONGSHOTBOT_H
 #define LONGSHOTBOT_H
 
@@ -8,38 +20,52 @@
 #include "SemiAutoBot.h"
 #include "ScoutBot.h"
 #include "HideBot.h"
+#include "battlefield.h"
 
 class LongShotBot : public virtual GenericRobot {
 public:
-    LongShotBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h) {
+    LongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield) {
         chooseShootingUpgrade("LongShotBot");
     }
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        if (shells <= 0) return;
-        
-        if (abs(x) + abs(y) > 3) {
+    // Override to allow shooting up to range 3 (Manhattan distance)
+    void fire(int x, int y) override {
+        if (shells <= 0) {
+            return; // no shells left, cannot shoot
+        }
+
+        // Allow range up to 3 
+        if (abs(x) + abs(y) > 3 || (x == 0 && y == 0)) {
             cout << "Target out of range for LongShotBot!\n";
             return;
         }
 
-        shells--;
+        shells--; // reduce shells by 1 when used
+
         int targetX = pos.robotPositionX + x;
         int targetY = pos.robotPositionY + y;
-        
-        if (targetX < 0 || targetX >= fieldWidth ||
-            targetY < 0 || targetY >= fieldHeight)
-            return;
 
-        if (rand() % 100 < 70) {
-            int damage = rand() % 71;
-            Robot* target = battlefield->getRobotAt(targetX, targetY);
-            if (target != nullptr && target->isLives()) {
-                target->takeDamage(damage);
-                cout << name << " hit " << target->getName() 
-                     << " from long range \n";
+        // Use the battlefield pointer from GenericRobot
+        Battlefield* bf = this->battlefield;
+        if (!bf) return;
+
+        if (targetX < 0 || targetX >= bf->getWidth() ||
+            targetY < 0 || targetY >= bf->getHeight()) {
+            return;
+        }
+
+        Robot* target = bf->getRobotAt(targetX, targetY);
+        if (target != nullptr && target->isAlive()) {
+            if (rand() % 100 < 70) {
+                cout << name << " sniped and killed " << target->getName() << " from long range!" << endl;
+                target->takeDamage(name, bf);
+                target->setAlive(false);
+            } else {
+                cout << name << " missed the long-range shot at " << target->getName() << "." << endl;
             }
+        } else {
+            cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << endl;
         }
     }
 
@@ -53,16 +79,11 @@ public:
 // LongShot + Hide
 class LongShotHideBot : public virtual LongShotBot, public virtual HideBot {
 public:
-    LongShotHideBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          HideBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        HideBot::think();
-    }
-
+    LongShotHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          HideBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide" << endl;
         LongShotBot::displayStats();
@@ -73,16 +94,11 @@ public:
 // LongShot + Scout
 class LongShotScoutBot : public virtual LongShotBot, public virtual ScoutBot {
 public:
-    LongShotScoutBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          ScoutBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        ScoutBot::think();
-    }
-
+    LongShotScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          ScoutBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout" << endl;
         LongShotBot::displayStats();
@@ -93,16 +109,11 @@ public:
 // LongShot + Jump
 class LongShotJumpBot : public virtual LongShotBot, public virtual JumpBot {
 public:
-    LongShotJumpBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          JumpBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        JumpBot::think();
-    }
-
+    LongShotJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          JumpBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump" << endl;
         LongShotBot::displayStats();
@@ -113,16 +124,11 @@ public:
 // LongShot + Track
 class LongShotTrackBot : public virtual LongShotBot, public virtual TrackBot {
 public:
-    LongShotTrackBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          TrackBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        TrackBot::think();
-    }
-
+    LongShotTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          TrackBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track" << endl;
         LongShotBot::displayStats();
@@ -133,18 +139,12 @@ public:
 // LongShot + Jump + Track
 class LongShotJumpTrackBot : public virtual LongShotBot, public virtual JumpBot, public virtual TrackBot {
 public:
-    LongShotJumpTrackBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          JumpBot(name, startX, startY, w, h),
-          TrackBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        JumpBot::think();
-        TrackBot::think();
-    }
-
+    LongShotJumpTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          JumpBot(name, startX, startY, w, h, battlefield),
+          TrackBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump + Track" << endl;
         LongShotBot::displayStats();
@@ -156,18 +156,12 @@ public:
 // LongShot + Hide + Scout
 class LongShotHideScoutBot : public virtual LongShotBot, public virtual HideBot, public virtual ScoutBot {
 public:
-    LongShotHideScoutBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          HideBot(name, startX, startY, w, h),
-          ScoutBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        HideBot::think();
-        ScoutBot::think();
-    }
-
+    LongShotHideScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          HideBot(name, startX, startY, w, h, battlefield),
+          ScoutBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide + Scout" << endl;
         LongShotBot::displayStats();
@@ -179,18 +173,12 @@ public:
 // LongShot + Hide + Track
 class LongShotHideTrackBot : public virtual LongShotBot, public virtual HideBot, public virtual TrackBot {
 public:
-    LongShotHideTrackBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          HideBot(name, startX, startY, w, h),
-          TrackBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        HideBot::think();
-        TrackBot::think();
-    }
-
+    LongShotHideTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          HideBot(name, startX, startY, w, h, battlefield),
+          TrackBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide + Track" << endl;
         LongShotBot::displayStats();
@@ -202,18 +190,12 @@ public:
 // LongShot + Jump + Scout
 class LongShotJumpScoutBot : public virtual LongShotBot, public virtual JumpBot, public virtual ScoutBot {
 public:
-    LongShotJumpScoutBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          JumpBot(name, startX, startY, w, h),
-          ScoutBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        JumpBot::think();
-        ScoutBot::think();
-    }
-
+    LongShotJumpScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          JumpBot(name, startX, startY, w, h, battlefield),
+          ScoutBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump + Scout" << endl;
         LongShotBot::displayStats();
@@ -225,18 +207,12 @@ public:
 // LongShot + Scout + Hide
 class LongShotScoutHideBot : public virtual LongShotBot, public virtual ScoutBot, public virtual HideBot {
 public:
-    LongShotScoutHideBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          ScoutBot(name, startX, startY, w, h),
-          HideBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        ScoutBot::think();
-        HideBot::think();
-    }
-
+    LongShotScoutHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          ScoutBot(name, startX, startY, w, h, battlefield),
+          HideBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout + Hide" << endl;
         LongShotBot::displayStats();
@@ -248,18 +224,12 @@ public:
 // LongShot + Track + Hide
 class LongShotTrackHideBot : public virtual LongShotBot, public virtual TrackBot, public virtual HideBot {
 public:
-    LongShotTrackHideBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          TrackBot(name, startX, startY, w, h),
-          HideBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        TrackBot::think();
-        HideBot::think();
-    }
-
+    LongShotTrackHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          TrackBot(name, startX, startY, w, h, battlefield),
+          HideBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track + Hide" << endl;
         LongShotBot::displayStats();
@@ -271,18 +241,12 @@ public:
 // LongShot + Track + Jump
 class LongShotTrackJumpBot : public virtual LongShotBot, public virtual TrackBot, public virtual JumpBot {
 public:
-    LongShotTrackJumpBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          TrackBot(name, startX, startY, w, h),
-          JumpBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        TrackBot::think();
-        JumpBot::think();
-    }
-
+    LongShotTrackJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          TrackBot(name, startX, startY, w, h, battlefield),
+          JumpBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track + Jump" << endl;
         LongShotBot::displayStats();
@@ -294,18 +258,12 @@ public:
 // LongShot + Scout + Jump
 class LongShotScoutJumpBot : public virtual LongShotBot, public virtual ScoutBot, public virtual JumpBot {
 public:
-    LongShotScoutJumpBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h),
-          LongShotBot(name, startX, startY, w, h),
-          ScoutBot(name, startX, startY, w, h),
-          JumpBot(name, startX, startY, w, h) {}
-
-    void think() override {
-        LongShotBot::think();
-        ScoutBot::think();
-        JumpBot::think();
-    }
-
+    LongShotScoutJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield),
+          LongShotBot(name, startX, startY, w, h, battlefield),
+          ScoutBot(name, startX, startY, w, h, battlefield),
+          JumpBot(name, startX, startY, w, h, battlefield) {}
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout + Jump" << endl;
         LongShotBot::displayStats();
