@@ -18,7 +18,7 @@ Phone: 0174081106
 #include <fstream>
 #include <sstream>
 #include "newrobot.h"
-#include "scoutrobot.h"
+#include "scoutbot.h"
 #include "firerobot.h"
 #include "reconrobot.h"
 using namespace std;
