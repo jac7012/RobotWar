@@ -14,10 +14,12 @@
 
 #include "Battlefield.h"
 #include "Robot.h"
+#include "Constants.h"
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -25,85 +27,122 @@ class DisplayManager {
 private:
     ofstream logFile;
     string logFilename;
-    
+
 public:
-    DisplayManager(const string& filename = "battle_log.txt") : logFilename(filename) {
+    DisplayManager(const string& filename = "robot_war_log.txt") : logFilename(filename) {
         logFile.open(logFilename);
-        if (!logFile) {
-            cerr << "Error opening log file!" << endl;
+        if (!logFile.is_open()) {
+            cerr << "Error: Could not open log file!" << endl;
         }
     }
-    
+
     ~DisplayManager() {
         if (logFile.is_open()) {
             logFile.close();
         }
     }
-    
+
+    // Display the battlefield grid
     void displayBattlefield(const Battlefield& battlefield) {
-        // Clear screen (platform specific)
-        #ifdef _WIN32
-            system("cls");
-        #else
-            system("clear");
-        #endif
+        // Clear console (works on most systems)
+        system("cls || clear");
         
-        cout << "\nCurrent Battlefield:\n";
-        for (int i = 0; i < battlefield.getHeight(); ++i) {
-            for (int j = 0; j < battlefield.getWidth(); ++j) {
-                cout << battlefield.getCell(i, j) << ' ';
-            }
-            cout << endl;
+        cout << "\n=== ROBOT WAR SIMULATION ===\n";
+        cout << "Battlefield (" << battlefield.getWidth() << "x" << battlefield.getHeight() << "):\n";
+        
+        // Display column numbers
+        cout << "   ";
+        for (int x = 0; x < battlefield.getWidth(); x++) {
+            cout << setw(2) << x % 10 << " ";
         }
-        cout << endl;
+        cout << "\n";
+
+        for (int y = battlefield.getHeight() - 1; y >= 0; y--) {
+            // Display row number
+            cout << setw(2) << y << " ";
+            
+            for (int x = 0; x < battlefield.getWidth(); x++) {
+                Robot* robot = battlefield.getRobotAt(x, y);
+                if (robot) {
+                    cout << robot->getName()[0] << "  ";
+                } else {
+                    cout << ".  ";
+                }
+            }
+            cout << "\n";
+        }
+        cout << "\nLegend: ";
+        for (Robot* robot : battlefield.getRobots()) {
+            if (robot->isAlive()) {
+                cout << robot->getName()[0] << "=" << robot->getName() << " ";
+            }
+        }
+        cout << "\n";
         
         // Log to file
-        logFile << "\nCurrent Battlefield:\n";
-        for (int i = 0; i < battlefield.getHeight(); ++i) {
-            for (int j = 0; j < battlefield.getWidth(); ++j) {
-                logFile << battlefield.getCell(i, j) << ' ';
+        logFile << "\n=== BATTLEFIELD STATE ===\n";
+        for (int y = battlefield.getHeight() - 1; y >= 0; y--) {
+            for (int x = 0; x < battlefield.getWidth(); x++) {
+                Robot* robot = battlefield.getRobotAt(x, y);
+                logFile << (robot ? robot->getName()[0] : '.') << " ";
             }
-            logFile << endl;
+            logFile << "\n";
         }
-        logFile << endl;
     }
-    
-    void displayRobotAction(const string& action) {
-        cout << action << endl;
-        logFile << action << endl;
+
+    // Display robot actions
+    void displayAction(const string& action) {
+        cout << "> " << action << "\n";
+        logFile << "> " << action << "\n";
     }
-    
-    void displayTurnHeader(int turn) {
-        string header = "--- Turn " + to_string(turn) + " ---";
-        cout << header << endl;
-        logFile << header << endl;
+
+    // Display turn information
+    void displayTurnInfo(int turn) {
+        string turnHeader = "=== TURN " + to_string(turn) + " ===";
+        cout << "\n" << turnHeader << "\n";
+        logFile << "\n" << turnHeader << "\n";
     }
-    
+
+    // Display game over message
     void displayGameOver(const vector<Robot*>& robots) {
-        int aliveCount = 0;
-        string winner;
-        
-        for (const auto& robot : robots) {
-            if (robot->isLives()) {
-                aliveCount++;
-                winner = robot->getName();
+        vector<string> survivors;
+        for (Robot* robot : robots) {
+            if (robot->isAlive()) {
+                survivors.push_back(robot->getName());
             }
         }
-        
-        if (aliveCount <= 1) {
-            string message = (aliveCount == 1) 
-                ? "Game Over! Winner: " + winner
-                : "Game Over! All robots destroyed!";
-                
-            cout << message << endl;
-            logFile << message << endl;
+
+        if (survivors.empty()) {
+            cout << "\nGAME OVER: All robots have been destroyed!\n";
+            logFile << "\nGAME OVER: All robots have been destroyed!\n";
+        } else if (survivors.size() == 1) {
+            cout << "\nGAME OVER: " << survivors[0] << " is the last robot standing!\n";
+            logFile << "\nGAME OVER: " << survivors[0] << " is the last robot standing!\n";
+        } else {
+            cout << "\nGAME OVER: Simulation ended with multiple survivors:\n";
+            logFile << "\nGAME OVER: Simulation ended with multiple survivors:\n";
+            for (const string& name : survivors) {
+                cout << "- " << name << "\n";
+                logFile << "- " << name << "\n";
+            }
         }
     }
-    
+
+    // Display robot stats
     void displayRobotStats(const Robot* robot) {
-        robot->displayStats();
-        // You could also log this if needed
+        cout << "\n" << robot->getName() << " stats:\n";
+        cout << "- Position: (" << robot->getX() << ", " << robot->getY() << ")\n";
+        cout << "- Lives: " << robot->getLives() << "\n";
+        cout << "- Shells: " << robot->getShells() << "\n";
+        cout << "- Upgrade Level: " << robot->getUpgradeLevel() << "\n";
+        
+        logFile << "\n" << robot->getName() << " stats:\n";
+        logFile << "- Position: (" << robot->getX() << ", " << robot->getY() << ")\n";
+        logFile << "- Lives: " << robot->getLives() << "\n";
+        logFile << "- Shells: " << robot->getShells() << "\n";
+        logFile << "- Upgrade Level: " << robot->getUpgradeLevel() << "\n";
     }
 };
 
 #endif // DISPLAYMANAGER_H
+
