@@ -164,7 +164,7 @@ int main() {
                 robots.push_back(new GenericRobot(name, x, y));
             } else if (type == "FireRobot") {
                 robots.push_back(new FireRobot(name, x, y, N, M));
-            } else if (type == "ScoutRobot") {
+            } else if (type == "ScoutBot") {
                 robots.push_back(new ScoutBot(name, x, y, N, M));
             } else if (type == "ReconRobot") {
                 robots.push_back(new ReconRobot(name, x, y, N, M));
