@@ -3,12 +3,14 @@
 
 #include "robot.h"
 #include "battlefield.h"
+#include "scoutbot.h"
 
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <string>
+using namespace std;
 
 // can look bigger (5x5) and only move 2 direction (left and right )
 class FastRobot: public Robot, public SeeingRobot, public MovingRobot
@@ -21,8 +23,8 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
 
     public:
         // constructor
-        ScoutRobot(const std::string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : Robot(name, startX, startY, w, h,battlefield), battlefield(battlefield)
+        FastRobot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : Robot(name, startX, startY, w, h), battlefield(battlefield)
         {
             battlefield -> placeRobot(this, startX, startY);// put inside battlefield and set initial position
             resetTurnFlags();
@@ -65,7 +67,7 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
            int centerX = pos.robotPositionX + x;   // center x and y
            int centerY = pos.robotPositionY + y;
 
-           std::cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")."<< endl;
+           cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")." << endl;
 
            for (int i = -2; i <= 2; ++i)   // check surrounding position
            {
@@ -80,7 +82,7 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
                        Robot* r = battlefield -> getRobotAt(lookX, lookY);
                        if (r!= nullptr)
                        {
-                           std::cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
+                           cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
                        }
                    }
                }
@@ -119,17 +121,13 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
                battlefield -> removeRobot(this); //remove the old position
                battlefield -> placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
                setPosition(newPos.robotPositionX, newPos.robotPositionY);
-               std::cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
+               cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
            }
            else
            {
-               std::cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
+               cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
            }
            }
-       }
-
-
-
-    };
+       };
 
 #endif
