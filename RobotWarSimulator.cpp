@@ -8,76 +8,76 @@ Lecture Section: TC1L
 Tutorial Section: TT2L
 Email: SHARVEENY.KALAI.KUMAR@student.mmu.edu.my
 Phone: 0174081106
-***********|**********|**********/
+**********|**********|**********/
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include "newrobot.h" // Contains base Robot class and Position struct
+#include <fstream>
+#include <sstream>
+#include "newrobot.h" // Assumes Robot base class and Position struct are defined here
 using namespace std;
 
-const int M = 20; // Number of rows in battlefield
-const int N = 40; // Number of columns in battlefield
-const int MAX_STEPS = 100; // Maximum number of turns in the simulation
+// Battlefield dimensions and simulation step count
+// These will be set from input.txt file
+int M; // Number of rows
+int N; // Number of columns
+int MAX_STEPS; // Maximum number of simulation turns
 
 class Robot; // Forward declaration of Robot class
 
-// Initialize the battlefield with empty cells ('.')
-vector<vector<char>> battlefield(M, vector<char>(N, '.'));
-
-// Vector to store all robot pointers
+// Global battlefield and robot list
+vector<vector<char>> battlefield;
 vector<Robot*> robots;
 
-// Utility function to find a random empty position on the battlefield
+// Function to find a random empty location in the battlefield
 Position findRandomEmptyPosition(int rows, int cols, const vector<vector<char>>& battlefield) {
     Position pos;
     do {
         pos.robotPositionX = rand() % rows;
         pos.robotPositionY = rand() % cols;
-    } while (battlefield[pos.robotPositionX][pos.robotPositionY] != '.'); // Repeat until empty cell is found
+    } while (battlefield[pos.robotPositionX][pos.robotPositionY] != '.');
     return pos;
 }
 
-// GenericRobot is a subclass of Robot with basic AI behavior
+// GenericRobot class inheriting from Robot
 class GenericRobot : public Robot {
 public:
-    // Constructor - initializes robot with a name and position, and marks it on the battlefield
     GenericRobot(string n, int xPos, int yPos)
         : Robot(n, xPos, yPos, N, M) {
-        battlefield[xPos][yPos] = name[0]; // Use first letter of name as symbol
+        // Place robot on battlefield using the first letter of its name
+        battlefield[xPos][yPos] = name[0];
     }
 
-    // Empty think() function – can be extended for smarter decision-making
-    void think() override {}
+    void think() override {
+        // Empty for now – can be used for decision logic
+    }
 
-    // Robot scans the surroundings (prints a message for now)
     void look() override {
         cout << name << " looks around.\n";
     }
 
-    // Move robot to a random adjacent empty cell
     void move() override {
-        int dx = rand() % 3 - 1; // -1, 0 or 1
-        int dy = rand() % 3 - 1; // -1, 0 or 1
+        // Attempt to move to a random neighboring cell
+        int dx = rand() % 3 - 1;
+        int dy = rand() % 3 - 1;
         int newX = pos.robotPositionX + dx;
         int newY = pos.robotPositionY + dy;
 
-        // Only move if within bounds and new cell is empty
         if (newX >= 0 && newX < M && newY >= 0 && newY < N && battlefield[newX][newY] == '.') {
             battlefield[pos.robotPositionX][pos.robotPositionY] = '.'; // Clear old position
             pos.robotPositionX = newX;
             pos.robotPositionY = newY;
-            battlefield[pos.robotPositionX][pos.robotPositionY] = name[0]; // Mark new position
+            battlefield[newX][newY] = name[0]; // Mark new position
             cout << name << " moved to (" << newX << "," << newY << ").\n";
         }
     }
 
-    // Robot fires at a random adjacent cell
     void fire() override {
         if (shells <= 0) {
-            handleDeath(); // If out of shells, trigger respawn or death
+            handleDeath(); // Self-destruct if out of ammo
             return;
         }
 
@@ -86,53 +86,51 @@ public:
         int tx = pos.robotPositionX + dx;
         int ty = pos.robotPositionY + dy;
 
-        // Only fire if direction is not (0,0) and target is within bounds
+        // Only fire if not targeting self and within bounds
         if ((dx != 0 || dy != 0) && tx >= 0 && tx < M && ty >= 0 && ty < N) {
             for (Robot* r : robots) {
                 if (r->isLives() && r != this &&
                     tx == r->getPosition().robotPositionX &&
                     ty == r->getPosition().robotPositionY) {
 
-                    // 70% chance to hit target
                     if ((rand() % 100) < 70) {
-                        r->takeDamage(100); // Inflict full damage
+                        r->takeDamage(100);
                         cout << name << " fired and hit " << r->getName() << "!\n";
                     } else {
                         cout << name << " fired and missed.\n";
                     }
-                    break; // Only attack one target
+                    break; // Only one target per fire
                 }
             }
         }
-        shells--; // Use up one shell per fire attempt
+        shells--; // Decrease ammo
     }
 
-    // Handles robot death and respawn
     void handleDeath() {
-        battlefield[pos.robotPositionX][pos.robotPositionY] = '.'; // Clear current cell
-        lives--; // Decrease life count
+        // Clear battlefield position
+        battlefield[pos.robotPositionX][pos.robotPositionY] = '.';
+        lives--;
 
         if (lives > 0) {
-            // Respawn robot at random empty location
+            // Respawn in a random empty location
             cout << name << " is respawning...\n";
             Position newPos = findRandomEmptyPosition(M, N, battlefield);
             pos = newPos;
-            health = 100; // Reset health
-            shells = 10;  // Reset ammo
-            battlefield[pos.robotPositionX][pos.robotPositionY] = name[0]; // Mark battlefield
+            health = 100;
+            shells = 10;
+            battlefield[newPos.robotPositionX][newPos.robotPositionY] = name[0];
         } else {
-            alive = false; // Mark as destroyed
+            alive = false;
             cout << name << " has been destroyed.\n";
         }
     }
 
-    // Displays robot action message
     void displayAction() override {
         cout << name << " is taking action.\n";
     }
 };
 
-// Prints the current state of the battlefield
+// Function to print the battlefield grid
 void displayBattlefield() {
     cout << "\nBattlefield:\n";
     for (int i = 0; i < M; ++i) {
@@ -143,7 +141,7 @@ void displayBattlefield() {
     }
 }
 
-// Main simulation loop
+// Simulation engine – loops through all steps and robots
 void simulate() {
     for (int step = 0; step < MAX_STEPS; ++step) {
         cout << "\n--- Turn " << step + 1 << " ---\n";
@@ -152,35 +150,74 @@ void simulate() {
         for (Robot* r : robots) {
             if (r->isLives()) {
                 r->displayAction();
-                r->think();  // Placeholder for future AI logic
-                r->look();   // Print look message
-                r->fire();   // Try to attack another robot
-                r->move();   // Move to new position
+                r->think();
+                r->look();
+                r->fire();
+                r->move();
             }
         }
 
-        // Check if only one or zero robots are left alive
+        // Stop simulation if only one robot remains
         int aliveCount = 0;
-        for (Robot* r : robots) if (r->isLives()) aliveCount++;
-        if (aliveCount <= 1) break; // End simulation if only one robot left
+        for (Robot* r : robots)
+            if (r->isLives()) aliveCount++;
+        if (aliveCount <= 1) break;
     }
     cout << "\nSimulation Ended.\n";
 }
 
-// Main function - sets up robots and starts the simulation
+// Main function reads config from input.txt and starts simulation
 int main() {
-    srand(time(0)); // Seed random generator
+    srand(time(0)); // Random seed for movement and fire
 
-    // Add robots to the battlefield
-    robots.push_back(new GenericRobot("Kidd", 3, 6));
-    robots.push_back(new GenericRobot("Jet", 12, 1));
-    robots.push_back(new GenericRobot("Alpha", 15, 20));
-    robots.push_back(new GenericRobot("Beta", 10, 25));
-    robots.push_back(new GenericRobot("Star", rand() % M, rand() % N)); // Random spawn position
+    ifstream configFile("input.txt");
+    if (!configFile) {
+        cerr << "Failed to open input.txt. Please make sure the file exists.\n";
+        return 1;
+    }
 
-    simulate(); // Start simulation
+    string line;
+    int robotCount = 0;
 
-    // Clean up allocated memory
+    // Read input.txt line by line
+    while (getline(configFile, line)) {
+        istringstream iss(line);
+        string label;
+
+        if (line.find("M by N") != string::npos) {
+            string dummy;
+            iss >> dummy >> dummy >> M >> N;
+        } else if (line.find("steps:") != string::npos) {
+            iss >> label >> MAX_STEPS;
+        } else if (line.find("robots:") != string::npos) {
+            iss >> label >> robotCount;
+        } else if (!line.empty() && isalpha(line[0])) {
+            // Parse robot data
+            string type, name, xStr, yStr;
+            iss >> type >> name >> xStr >> yStr;
+
+            int x = (xStr == "random") ? rand() % M : stoi(xStr);
+            int y = (yStr == "random") ? rand() % N : stoi(yStr);
+
+            // Currently supports GenericRobot
+            if (type == "GenericRobot") {
+                robots.push_back(new GenericRobot(name, x, y));
+            }
+        }
+    }
+
+    // Initialize the battlefield with empty cells
+    battlefield = vector<vector<char>>(M, vector<char>(N, '.'));
+
+    // Mark initial positions of all robots
+    for (Robot* r : robots) {
+        Position p = r->getPosition();
+        battlefield[p.robotPositionX][p.robotPositionY] = r->getName()[0];
+    }
+
+    simulate(); // Run simulation
+
+    // Free dynamically allocated memory
     for (Robot* r : robots) delete r;
 
     return 0;
