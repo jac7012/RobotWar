@@ -1,118 +1,249 @@
 #ifndef GENERICROBOT_H
 #define GENERICROBOT_H
 
-#include "newrobot.h"
-#include "Battlefield.h"
+#include "robot.h"
+#include "battlefield.h"
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <string>
-#include <algorithm>
-using namespace std;
 
 
 
-class GenericRobot: public virtual Robot, public ThinkingRobot,  public SeeingRobot, public ShootingRobot, public MovingRobot
+class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, public ShootingRobot, public MovingRobot
 {
     private:
-        vector<string> availableUpgrades;
-    bool hasMoved;
-    bool hasFired;
-    bool hasLooked;
-    string currentSeeingUpgrade; // Add this to store the chosen upgrade
-    string currentMovingUpgrade;    // Add this to store the chosen moving upgrade
-    string currentShootingUpgrade;  // Add this to store the chosen shooting upgrade
+        Battlefield* battlefield;   // to access robot position
+
+        bool hasThought;
+        bool hasLooked;
+        bool hasFired;
+        bool hasMoved;
+
     public:
         // constructor
-        GenericRobot(const string& name, int startX, int startY, int w, int h)
-        : Robot(name, startX, startY, w, h),
-          ThinkingRobot(name, startX, startY),
-          SeeingRobot(name, startX, startY),
-          ShootingRobot(name, startX, startY),
-          MovingRobot(name, startX, startY),
-          hasMoved(false), hasFired(false), hasLooked(false) 
+        GenericRobot(const std::string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : Robot(name, startX, startY, w, h,battlefield), battlefield(battlefield)
+        {
+            battlefield -> placeRobot(this, startX, startY);// put inside battlefield and set initial position
+            resetTurnFlags();
+        }
+
+        void resetTurnFlags()
+        {
+            hasThought = false;
+            hasLooked = false;
+            hasFired = false;
+            hasMoved = false;
+        }
+
+        // each round(step) action execution, cannot repeat, follow think-look-fire-move
+        void performTurn()
+        {
+            resetTurnFlags();
+
+            // 1. think
+            if (!hasThought)
+            {
+                think();
+                hasThought=true;
+                if (!alive)       // if no shell will self destruct
+                {
+                   return;
+                }
+            }
+
+            // 2. look
+            if (!hasLooked)
+            {
+                int lookX = (rand()%3) -1;
+                int lookY = (rand()%3) -1;
+                look(lookX, lookY);
+                hasLooked = true;
+            }
+
+            // 3. Fire
+            if (!hasFired)
+            {
+                int fireX, fireY;
+                do
+                {
+                    fireX = (rand()%3) -1;
+                    fireY = (rand()%3) -1;
+                }
+                while (fireX == 0 && fireY == 0);
+                fire(fireX, fireY);
+                hasFired = true;
+            }
+
+            // 4. Move
+            if (!hasMoved)
+            {
+                int direction = rand()%8;
+                move(direction);
+                hasMoved = true;
+            }
+        }
+
+        virtual void think() override       // if shell runs out, robot will self destruct
+        {
+            if (shells <= 0)
+            {
+               std::cout << name << " has no shells left. Self-destructed."<< std::endl ;
+               lives--;
+
+               if (lives >0)
+               {
+                   respawnRandom(battlefield);
+               }
+               else
+               {
+                   alive = false;
+                   std::cout << name << "is permanently dead." << endl;
+               }
+            }
+        }
+
+        //look around in the center position
+       virtual void look(int x, int y)
+       {
+           int centerX = pos.robotPositionX + x;   // center x and y
+           int centerY = pos.robotPositionY + y;
+
+           std::cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")." << endl;
+
+           for (int i = -1; i <= 1; ++i)   // check surrounding position
+           {
+               for (int j = -1; j <= 1; ++j)
+               {
+                   int lookX = centerX + i;
+                   int lookY = centerY + j;
+
+                   if (lookX >=0 && lookX < battlefield ->getWidth() &&     //// check if the position is inside battlefield
+                       lookY >=0 && lookY < battlefield ->getWidth())
+                   {
+                       Robot* r = battlefield -> getRobotAt(lookX, lookY);
+                       if (r!= nullptr)
+                       {
+                           std::cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
+                       }
+                   }
+               }
+           }
+       }
+
+
+        // shoot the robot in the direction of x, y
+        virtual void fire(int x, int y) override
+       {
+           if (shells <=0)
+           {
+               return;      // no shells left, cannot shoot
+           }
+
+          if (x < -1 || x > 1 || y < -1 || y > 1 || (x == 0 && y == 0))
           {
-        availableUpgrades = {"Moving", "Shooting", "Seeing"};
-        pos.robotPositionX = startX;
-        pos.robotPositionY = startY;
-        }
+              return;                 //cannot shoot at self and out of range
+          }
 
-    virtual void think() override 
-    { 
-        if (shells <= 0) 
-        {
-            cout << name << " has no shells left. Self-destructed!\n";
-            health = 0;
-        }
-    }
+           shells--;                  // reduce shells by 1 when used
 
-    //look around in the center position
-    virtual void look(int x, int y) 
-    {
-        int centerX = pos.robotPositionX + x;   // center x and y
-        int centerY = pos.robotPositionY + y;
+           // calculate target position
+           int targetX = pos.robotPositionX + x;
+           int targetY = pos.robotPositionY + y;
 
-        for (int i = -1; i <= 1; ++i)   // check surrounding position
-        {
-            for (int j = -1; j <= 1; ++j)
+           // check if target position is inside battlefield
+           if (targetX < 0 || targetX >= battlefield -> getWidth() ||
+               targetY < 0 || targetY >= battlefield -> getHeight())
+               {
+                   return;
+               }
+
+            Robot* target = battlefield -> getRobotAt(targetX,targetY);
+            if (target != nullptr && target -> isAlive())        // robot not null and alive
             {
-                int lookX = centerX + i;
-                int lookY = centerY + j;
-
-                // check if the position is inside battlefield
-                bool inBattlefield = (lookX >= 0 && lookX < fieldWidth &&
-                            lookY >= 0 && lookY < fieldHeight);
-                
+                if(rand() % 100 < 70)
+                {
+                    std::cout << name << " successfully hit " << target -> getName() << "." << endl;
+                    target -> takeDamage(name, battlefield);
+                }
+                else
+                {
+                    std::cout << name << " missed the shot at " << target -> getName() << "." << endl;
+                }
+            } else
+            {
+                std::cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << endl;    //when the target is null and the target robot not alive
             }
         }
-        /*no cout surrounding robot*/
-    }
 
 
-    // shoot the robot
-    virtual void fire(Battlefield* battlefield, int x, int y) 
-      // shoot in the direction of x, y
-    { 
-        if (shells <=0) return;  // no shells left, cannot shoot
+       Position calNewPosition(int direction)   // calculate new position based on direction
+       {
+           Position newPos = pos;      //start with current position
+           switch (direction)
+           {
+               case 0: // Up
+                   newPos.robotPositionY+= 1;
+                   break;
+               case 1: // Left up
+                   newPos.robotPositionX-=1;
+                   newPos.robotPositionY+=1;
+                   break;
+               case 2: // Right up
+                   newPos.robotPositionX+=1;
+                   newPos.robotPositionY+=1;
+                   break;
+               case 3: // Left
+                   newPos.robotPositionX-=1;
+                   break;
+               case 4: // Right
+                   newPos.robotPositionX+=1;
+                   break;
+               case 5: // Down
+                   newPos.robotPositionY-=1;
+                   break;
+               case 6: // Left down
+                   newPos.robotPositionX-=1;
+                   newPos.robotPositionY-=1;
+                   break;
+               case 7: // Right down
+                   newPos.robotPositionX+=1;
+                   newPos.robotPositionY-=1;
+                   break;
+               default:
+                   break;
+           }
+           return newPos;
+       }
 
-        if (x < -1 || x > 1 || y < -1 || y > 1 || (x == 0 && y == 0)) return; //cannot shoot at self and out of range
-        shells--;                  // reduce shells by 1 when used
+       // Check if the new position is inside battlefield
+       bool isValidMove(Position p)
+       {
+           return (p.robotPositionX >= 0 && p.robotPositionX < battlefield ->getWidth() &&
+                   p.robotPositionY >= 0 && p.robotPositionY < battlefield ->getHeight() &&
+                   battlefield -> getRobotAt(p.robotPositionX,p.robotPositionY)== nullptr);
+       }
 
-        // calculate target position
-        int targetX = pos.robotPositionX + x;
-        int targetY = pos.robotPositionY + y;
-
-        // check if target position is inside battlefield
-        if (targetX < 0 || targetX >= fieldWidth ||
-            targetY < 0 || targetY >= fieldHeight)
-            return; 
-
-        if(rand() % 100 < 70) // 70% chance to hit
-        {
-            int damage = rand() % 71; //0-70%
-
-            // get the target robot at the target position
-            Robot* target = battlefield->getRobotAt(targetX, targetY);
-            if (target != nullptr && target->isLives())
-            {
-                target->takeDamage(damage);
-                std::cout << name << " hit " << target->getName() << " for " << damage << " damage.\n";
-            }
-
-        
-        } 
-    }
-
-    Position calNewPosition(int direction);   // calculate new position based on direction
-
-    // Check if the new position is inside battlefield 
-    bool isValidMove(Position p);
-
-    virtual void move(int direction);
-
-    // Add this method to allow choosing a seeing upgrade
-    void chooseSeeingUpgrade(const string& upgradeName) {
+       virtual void move(int direction) override
+       {
+           Position newPos = calNewPosition(direction);
+           if(isValidMove(newPos))
+           {
+               battlefield -> removeRobot(this); //remove the old position
+               battlefield -> placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
+               setPosition(newPos.robotPositionX, newPos.robotPositionY);
+               std::cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
+           }
+           else
+           {
+               std::cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
+           }
+       }
+       
+       void chooseSeeingUpgrade(const string& upgradeName) {
         // You can expand this logic as needed
         if (find(availableUpgrades.begin(), availableUpgrades.end(), upgradeName) != availableUpgrades.end()) {
             currentSeeingUpgrade = upgradeName;
@@ -144,74 +275,16 @@ class GenericRobot: public virtual Robot, public ThinkingRobot,  public SeeingRo
         }
     }
 
-    virtual void displayStats() const {
-        cout << "Name: " << name
-             << " | Health: " << health
-             << " | Shells: " << shells
-             << " | Lives: " << lives
-             << " | Hidden: " << (hidden ? "Yes" : "No")
-             << endl;
-    }
-
 };
 
-// Implementation of member functions outside the class definition
-
-inline Position GenericRobot::calNewPosition(int direction)
-{
-    Position newPos = pos;      //start with current position
-    switch (direction)
-    {
-        case 0: // Up
-            newPos.robotPositionY+= 1;
-            break;
-        case 1: // Left up
-            newPos.robotPositionX-=1;
-            newPos.robotPositionY+=1;
-            break;
-        case 2: // Right up
-            newPos.robotPositionX+=1;
-            newPos.robotPositionY+=1;
-            break;
-        case 3: // Left
-            newPos.robotPositionX-=1;
-            break;
-        case 4: // Right
-            newPos.robotPositionX+=1;
-            break;
-        case 5: // Down
-            newPos.robotPositionY-=1;
-            break;
-        case 6: // Left down
-            newPos.robotPositionX-=1;
-            newPos.robotPositionY-=1;
-            break;
-        case 7: // Right down
-            newPos.robotPositionX+=1;
-            newPos.robotPositionY-=1;
-            break;
-        default:
-            break;
-    }
-    return newPos;
-}
-
-inline bool GenericRobot::isValidMove(Position p)
-{
-    return (p.robotPositionX >= 0 && p.robotPositionX < fieldWidth &&
-            p.robotPositionY >= 0 && p.robotPositionY < fieldHeight);
-}
-
-inline void GenericRobot::move(int direction)
-{
-    Position newPos = calNewPosition(direction);
-    if(isValidMove(newPos))
-    {
-        pos = newPos;
-    }
-}
 
 
 #endif
 
 
+
+/*
+main cpp,
+srand((unsigned int)time(nullptr)); // for initial random
+
+*/
