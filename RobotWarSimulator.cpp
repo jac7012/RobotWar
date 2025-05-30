@@ -17,7 +17,7 @@ Phone: 0174081106
 #include <ctime>
 #include <fstream>
 #include <sstream>
-#include "newrobot.h"
+#include "robot.h"
 #include "scoutbot.h"
 #include "firerobot.h"
 #include "reconrobot.h"
