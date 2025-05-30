@@ -36,10 +36,7 @@ public:
         }
 
         // Allow range up to 3 
-        if (abs(x) + abs(y) > 3 || (x == 0 && y == 0)) {
-            cout << "Target out of range for LongShotBot!\n";
-            return;
-        }
+        if (abs(x) + abs(y) < 4 && (x != 0 && y != 0)) {
 
         shells--; // reduce shells by 1 when used
 
@@ -67,6 +64,7 @@ public:
         } else {
             cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << endl;
         }
+    }
     }
 
     void displayStats() const override {
