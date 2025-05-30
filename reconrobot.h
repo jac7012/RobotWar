@@ -1,38 +1,37 @@
-#ifndef reconrobot_h
-#define reconrobot_h
-#include newrobot.h
+#ifndef RECONROBOT_H
+#define RECONROBOT_H
 
+#include "newrobot.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <string>
 
-class ReconRobot: public lookingRobot, public shootingRobot, public movingRobot
-{
-    public:
-        // constructor
-        ReconRobot(const std::string& name, int x, int y, int w, int h)
+class ReconRobot : public SeeingRobot, public ShootingRobot, public MovingRobot {
+public:
+    ReconRobot(const std::string& name, int x, int y, int w, int h)
         : Robot(name, x, y, w, h) {}
-        
-        // move the robot
-        void move(int direction) override
-        {
-            Robot::move(direction);
-        }
-        
-        // shoot the robot
-        void fire(int x, int y) override
-        {
-            Robot::fire(x, y);
-        }
-        
-        // look around the robot
-        void look(int x, int y) override
-        {
-            Robot::look(x, y);
-        }
-        
+
+    void move(int direction) override {
+        std::cout << name << " moves in direction " << direction << ".\n";
+    }
+
+    void fire(int x, int y) override {
+        std::cout << name << " fires at (" << x << "," << y << ").\n";
+    }
+
+    void look(int x, int y) override {
+        std::cout << name << " looks at (" << x << "," << y << ").\n";
+    }
+
+    bool canUpgrade() const override {
+        return false;
+    }
+
+    void upgrade(const std::string& upgradeType) override {
+        std::cout << name << " cannot upgrade.\n";
+    }
 };
 
 #endif

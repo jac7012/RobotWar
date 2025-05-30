@@ -13,7 +13,7 @@
 class ScoutBot : public virtual GenericRobot {
 private:
     int scoutCount;
-    
+
 public:
     ScoutBot(const string& name, int startX, int startY, int w, int h)
         : GenericRobot(name, startX, startY, w, h), scoutCount(3) {
@@ -32,6 +32,14 @@ public:
     void displayStats() const override {
         GenericRobot::displayStats();
         cout << "Upgrade: ScoutBot | Scouts left: " << scoutCount << endl;
+    }
+
+    bool canUpgrade() const override {
+        return false;
+    }
+
+    void upgrade(const string& upgradeType) override {
+        cout << name << " does not support upgrades.\n";
     }
 };
 
