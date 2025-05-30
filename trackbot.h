@@ -1,3 +1,15 @@
+/**********|**********|**********|
+ Program: TrackBot.h
+ Course: OOPDS
+ Trimester: 2510
+ Name: Lim E Jac
+ ID: 242UC245BG
+ Lecture Section: TC1L
+ Tutorial Section: TT2L
+ Email: LIM.E.JAC@student.mmu.edu.my
+ Phone: 017-7026113
+ **********|**********|**********/
+
 #ifndef TRACKBOT_H
 #define TRACKBOT_H
 
@@ -16,8 +28,8 @@ private:
     map<string, Position> trackedRobots;
     
 public:
-    TrackBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h), trackers(3) {
+    TrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield), trackers(3) {
         chooseSeeingUpgrade("TrackBot");
     }
 
@@ -59,9 +71,10 @@ public:
 // TrackBot + Hide
 class TrackHideBot : public virtual TrackBot, public virtual HideBot {
 public:
-    TrackHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); HideBot::think(); }
+    TrackHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Hide" << endl;
         TrackBot::displayStats();
@@ -72,9 +85,10 @@ public:
 // TrackBot + Jump
 class TrackJumpBot : public virtual TrackBot, public virtual JumpBot {
 public:
-    TrackJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); JumpBot::think(); }
+    TrackJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Jump" << endl;
         TrackBot::displayStats();
@@ -85,9 +99,10 @@ public:
 // TrackBot + LongShot
 class TrackLongShotBot : public virtual TrackBot, public virtual LongShotBot {
 public:
-    TrackLongShotBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), LongShotBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); LongShotBot::think(); }
+    TrackLongShotBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          LongShotBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + LongShot" << endl;
         TrackBot::displayStats();
@@ -98,9 +113,10 @@ public:
 // TrackBot + SemiAuto
 class TrackSemiAutoBot : public virtual TrackBot, public virtual SemiAutoBot {
 public:
-    TrackSemiAutoBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); SemiAutoBot::think(); }
+    TrackSemiAutoBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          SemiAutoBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + SemiAuto" << endl;
         TrackBot::displayStats();
@@ -111,9 +127,10 @@ public:
 // TrackBot + ThirtyShot
 class TrackThirtyShotBot : public virtual TrackBot, public virtual ThirtyShotBot {
 public:
-    TrackThirtyShotBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); ThirtyShotBot::think(); }
+    TrackThirtyShotBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + ThirtyShot" << endl;
         TrackBot::displayStats();
@@ -124,9 +141,11 @@ public:
 // TrackBot + Hide + LongShot
 class TrackHideLongShotBot : public virtual TrackBot, public virtual HideBot, public virtual LongShotBot {
 public:
-    TrackHideLongShotBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), HideBot(name, x, y, w, h), LongShotBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); HideBot::think(); LongShotBot::think(); }
+    TrackHideLongShotBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield),
+          LongShotBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Hide + LongShot" << endl;
         TrackBot::displayStats();
@@ -138,9 +157,11 @@ public:
 // TrackBot + Hide + SemiAuto
 class TrackHideSemiAutoBot : public virtual TrackBot, public virtual HideBot, public virtual SemiAutoBot {
 public:
-    TrackHideSemiAutoBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), HideBot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); HideBot::think(); SemiAutoBot::think(); }
+    TrackHideSemiAutoBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield),
+          SemiAutoBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Hide + SemiAuto" << endl;
         TrackBot::displayStats();
@@ -152,9 +173,11 @@ public:
 // TrackBot + Hide + ThirtyShot
 class TrackHideThirtyShotBot : public virtual TrackBot, public virtual HideBot, public virtual ThirtyShotBot {
 public:
-    TrackHideThirtyShotBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), HideBot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); HideBot::think(); ThirtyShotBot::think(); }
+    TrackHideThirtyShotBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Hide + ThirtyShot" << endl;
         TrackBot::displayStats();
@@ -166,9 +189,11 @@ public:
 // TrackBot + Jump + LongShot
 class TrackJumpLongShotBot : public virtual TrackBot, public virtual JumpBot, public virtual LongShotBot {
 public:
-    TrackJumpLongShotBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), JumpBot(name, x, y, w, h), LongShotBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); JumpBot::think(); LongShotBot::think(); }
+    TrackJumpLongShotBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield),
+          LongShotBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Jump + LongShot" << endl;
         TrackBot::displayStats();
@@ -180,9 +205,11 @@ public:
 // TrackBot + Jump + SemiAuto
 class TrackJumpSemiAutoBot : public virtual TrackBot, public virtual JumpBot, public virtual SemiAutoBot {
 public:
-    TrackJumpSemiAutoBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), JumpBot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); JumpBot::think(); SemiAutoBot::think(); }
+    TrackJumpSemiAutoBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield),
+          SemiAutoBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Jump + SemiAuto" << endl;
         TrackBot::displayStats();
@@ -194,9 +221,11 @@ public:
 // TrackBot + Jump + ThirtyShot
 class TrackJumpThirtyShotBot : public virtual TrackBot, public virtual JumpBot, public virtual ThirtyShotBot {
 public:
-    TrackJumpThirtyShotBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), JumpBot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); JumpBot::think(); ThirtyShotBot::think(); }
+    TrackJumpThirtyShotBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + Jump + ThirtyShot" << endl;
         TrackBot::displayStats();
@@ -208,9 +237,11 @@ public:
 // TrackBot + LongShot + Hide
 class TrackLongShotHideBot : public virtual TrackBot, public virtual LongShotBot, public virtual HideBot {
 public:
-    TrackLongShotHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), LongShotBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); LongShotBot::think(); HideBot::think(); }
+    TrackLongShotHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          LongShotBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + LongShot + Hide" << endl;
         TrackBot::displayStats();
@@ -222,9 +253,11 @@ public:
 // TrackBot + LongShot + Jump
 class TrackLongShotJumpBot : public virtual TrackBot, public virtual LongShotBot, public virtual JumpBot {
 public:
-    TrackLongShotJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), LongShotBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); LongShotBot::think(); JumpBot::think(); }
+    TrackLongShotJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          LongShotBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + LongShot + Jump" << endl;
         TrackBot::displayStats();
@@ -236,9 +269,11 @@ public:
 // TrackBot + SemiAuto + Hide
 class TrackSemiAutoHideBot : public virtual TrackBot, public virtual SemiAutoBot, public virtual HideBot {
 public:
-    TrackSemiAutoHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); SemiAutoBot::think(); HideBot::think(); }
+    TrackSemiAutoHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          SemiAutoBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + SemiAuto + Hide" << endl;
         TrackBot::displayStats();
@@ -250,9 +285,11 @@ public:
 // TrackBot + SemiAuto + Jump
 class TrackSemiAutoJumpBot : public virtual TrackBot, public virtual SemiAutoBot, public virtual JumpBot {
 public:
-    TrackSemiAutoJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), SemiAutoBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); SemiAutoBot::think(); JumpBot::think(); }
+    TrackSemiAutoJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          SemiAutoBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + SemiAuto + Jump" << endl;
         TrackBot::displayStats();
@@ -264,9 +301,11 @@ public:
 // TrackBot + ThirtyShot + Hide
 class TrackThirtyShotHideBot : public virtual TrackBot, public virtual ThirtyShotBot, public virtual HideBot {
 public:
-    TrackThirtyShotHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); ThirtyShotBot::think(); HideBot::think(); }
+    TrackThirtyShotHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + ThirtyShot + Hide" << endl;
         TrackBot::displayStats();
@@ -278,9 +317,11 @@ public:
 // TrackBot + ThirtyShot + Jump
 class TrackThirtyShotJumpBot : public virtual TrackBot, public virtual ThirtyShotBot, public virtual JumpBot {
 public:
-    TrackThirtyShotJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), TrackBot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { TrackBot::think(); ThirtyShotBot::think(); JumpBot::think(); }
+    TrackThirtyShotJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: Track + ThirtyShot + Jump" << endl;
         TrackBot::displayStats();
