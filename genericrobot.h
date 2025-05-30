@@ -9,8 +9,9 @@
 #include <ctime>
 #include <vector>
 #include <string>
+#include <algorithm>
 
-
+using namespace std;
 
 class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, public ShootingRobot, public MovingRobot
 {
@@ -22,13 +23,42 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
         bool hasFired;
         bool hasMoved;
 
+        // Add upgrade tracking variables
+        string currentSeeingUpgrade;
+        string currentMovingUpgrade;
+        string currentShootingUpgrade;
+        // Only keep the basic upgrade types here
+        vector<string> availableUpgrades = {
+            "TrackBot", "ScoutBot", "SemiAutoBot", "ThirtyShotBot", "LongShotBot", "JumpBot", "HideBot"
+        };
+
     public:
+        // Static lists for all possible upgrade combinations
+        static const vector<string> firstUpgrades;
+        static const vector<string> secondUpgrades;
+        static const vector<string> thirdUpgrades;
+
         // constructor
-        GenericRobot(const std::string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : Robot(name, startX, startY, w, h,battlefield), battlefield(battlefield)
+        GenericRobot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : Robot(name, startX, startY, w, h), battlefield(battlefield)
         {
             battlefield -> placeRobot(this, startX, startY);// put inside battlefield and set initial position
             resetTurnFlags();
+        }
+
+        virtual void displayStats() const {
+            cout << "Robot Name: " << name << endl;
+            cout << "Position: (" << pos.robotPositionX << ", " << pos.robotPositionY << ")" << endl;
+            cout << "Lives: " << lives << endl;
+            cout << "Shells: " << shells << endl;
+            cout << "Alive: " << (alive ? "Yes" : "No") << endl;
+            // Output upgrades if selected
+            cout << "Current Seeing Upgrade: " 
+                 << (currentSeeingUpgrade.empty() ? "None" : currentSeeingUpgrade) << endl;
+            cout << "Current Moving Upgrade: " 
+                 << (currentMovingUpgrade.empty() ? "None" : currentMovingUpgrade) << endl;
+            cout << "Current Shooting Upgrade: " 
+                 << (currentShootingUpgrade.empty() ? "None" : currentShootingUpgrade) << endl;
         }
 
         void resetTurnFlags()
@@ -91,7 +121,7 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
         {
             if (shells <= 0)
             {
-               std::cout << name << " has no shells left. Self-destructed."<< std::endl ;
+               cout << name << " has no shells left. Self-destructed."<< endl ;
                lives--;
 
                if (lives >0)
@@ -101,7 +131,7 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
                else
                {
                    alive = false;
-                   std::cout << name << "is permanently dead." << endl;
+                   cout << name << "is permanently dead." << endl;
                }
             }
         }
@@ -112,7 +142,7 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
            int centerX = pos.robotPositionX + x;   // center x and y
            int centerY = pos.robotPositionY + y;
 
-           std::cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")." << endl;
+           cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")." << endl;
 
            for (int i = -1; i <= 1; ++i)   // check surrounding position
            {
@@ -127,7 +157,7 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
                        Robot* r = battlefield -> getRobotAt(lookX, lookY);
                        if (r!= nullptr)
                        {
-                           std::cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
+                           cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
                        }
                    }
                }
@@ -166,16 +196,16 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
             {
                 if(rand() % 100 < 70)
                 {
-                    std::cout << name << " successfully hit " << target -> getName() << "." << endl;
+                    cout << name << " successfully hit " << target -> getName() << "." << endl;
                     target -> takeDamage(name, battlefield);
                 }
                 else
                 {
-                    std::cout << name << " missed the shot at " << target -> getName() << "." << endl;
+                    cout << name << " missed the shot at " << target -> getName() << "." << endl;
                 }
             } else
             {
-                std::cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << endl;    //when the target is null and the target robot not alive
+                cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << endl;    //when the target is null and the target robot not alive
             }
         }
 
@@ -235,11 +265,11 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
                battlefield -> removeRobot(this); //remove the old position
                battlefield -> placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
                setPosition(newPos.robotPositionX, newPos.robotPositionY);
-               std::cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
+               cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
            }
            else
            {
-               std::cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
+               cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
            }
        }
        
@@ -288,3 +318,38 @@ main cpp,
 srand((unsigned int)time(nullptr)); // for initial random
 
 */
+
+// Define the static upgrade lists outside the class
+const vector<string> GenericRobot::firstUpgrades = {
+    "TrackBot", "ScoutBot", "SemiAutoBot", "ThirtyShotBot", "LongShotBot", "JumpBot", "HideBot"
+};
+
+const vector<string> GenericRobot::secondUpgrades = {
+    // Moving → Shooting
+    "HideLongShotBot", "HideSemiAutoBot", "HideThirtyShotBot", "JumpLongShotBot", "JumpSemiAutoBot", "JumpThirtyShotBot",
+    // Moving → Seeing
+    "HideScoutBot", "HideTrackBot", "JumpScoutBot", "JumpTrackBot",
+    // Shooting → Moving
+    "LongShotHideBot", "LongShotJumpBot", "SemiAutoHideBot", "SemiAutoJumpBot", "ThirtyShotHideBot", "ThirtyShotJumpBot",
+    // Shooting → Seeing
+    "LongShotScoutBot", "LongShotTrackBot", "SemiAutoScoutBot", "SemiAutoTrackBot", "ThirtyShotScoutBot", "ThirtyShotTrackBot",
+    // Seeing → Moving
+    "ScoutHideBot", "ScoutJumpBot", "TrackHideBot", "TrackJumpBot",
+    // Seeing → Shooting
+    "ScoutLongShotBot", "ScoutSemiAutoBot", "ScoutThirtyShotBot", "TrackLongShotBot", "TrackSemiAutoBot", "TrackThirtyShotBot"
+};
+
+const vector<string> GenericRobot::thirdUpgrades = {
+    "HideLongShotScoutBot", "HideLongShotTrackBot", "HideSemiAutoScoutBot", "HideSemiAutoTrackBot", "HideThirtyShotScoutBot", "HideThirtyShotTrackBot",
+    "JumpLongShotScoutBot", "JumpLongShotTrackBot", "JumpSemiAutoScoutBot", "JumpSemiAutoTrackBot", "JumpThirtyShotScoutBot", "JumpThirtyShotTrackBot",
+    "HideScoutLongShotBot", "HideScoutSemiAutoBot", "HideScoutThirtyShotBot", "HideTrackLongShotBot", "HideTrackSemiAutoBot", "HideTrackThirtyShotBot",
+    "JumpScoutLongShotBot", "JumpScoutSemiAutoBot", "JumpScoutThirtyShotBot", "JumpTrackLongShotBot", "JumpTrackSemiAutoBot", "JumpTrackThirtyShotBot",
+    "LongShotHideScoutBot", "LongShotHideTrackBot", "LongShotJumpScoutBot", "LongShotJumpTrackBot", "SemiAutoHideScoutBot", "SemiAutoHideTrackBot",
+    "SemiAutoJumpScoutBot", "SemiAutoJumpTrackBot", "ThirtyShotHideScoutBot", "ThirtyShotHideTrackBot", "ThirtyShotJumpScoutBot", "ThirtyShotJumpTrackBot",
+    "LongShotScoutHideBot", "LongShotScoutJumpBot", "LongShotTrackHideBot", "LongShotTrackJumpBot", "SemiAutoScoutHideBot", "SemiAutoScoutJumpBot",
+    "SemiAutoTrackHideBot", "SemiAutoTrackJumpBot", "ThirtyShotScoutHideBot", "ThirtyShotScoutJumpBot", "ThirtyShotTrackHideBot", "ThirtyShotTrackJumpBot",
+    "ScoutHideLongShotBot", "ScoutHideSemiAutoBot", "ScoutHideThirtyShotBot", "ScoutJumpLongShotBot", "ScoutJumpSemiAutoBot", "ScoutJumpThirtyShotBot",
+    "TrackHideLongShotBot", "TrackHideSemiAutoBot", "TrackHideThirtyShotBot", "TrackJumpLongShotBot", "TrackJumpSemiAutoBot", "TrackJumpThirtyShotBot",
+    "ScoutLongShotHideBot", "ScoutLongShotJumpBot", "ScoutSemiAutoHideBot", "ScoutSemiAutoJumpBot", "ScoutThirtyShotHideBot", "ScoutThirtyShotJumpBot",
+    "TrackLongShotHideBot", "TrackLongShotJumpBot", "TrackSemiAutoHideBot", "TrackSemiAutoJumpBot", "TrackThirtyShotHideBot", "TrackThirtyShotJumpBot"
+};
