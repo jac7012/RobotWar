@@ -1,5 +1,5 @@
 /**********|**********|**********|
- Program: hibeBot.h
+ Program: ScoutBot.h
  Course: OOPDS
  Trimester: 2510
  Name: Lim E Jac
@@ -10,7 +10,7 @@
  Phone: 017-7026113
  **********|**********|**********/
 
- #ifndef SCOUTBOT_H
+#ifndef SCOUTBOT_H
 #define SCOUTBOT_H
 
 #include "GenericRobot.h"
