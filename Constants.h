@@ -38,6 +38,9 @@ enum Direction {
 // Robot types
 enum RobotType {
     GENERIC_ROBOT,
+    FIRE_ROBOT,
+    RECON_ROBOT,
+    FAST_ROBOT
     JUMP_BOT,
     LONG_SHOT_BOT,
     SEMI_AUTO_BOT,
@@ -46,3 +49,27 @@ enum RobotType {
     TRACK_BOT,
     HIDE_BOT,
 };
+
+enum UpgradeType {
+    MOVING_UPGRADE,
+    SHOOTING_UPGRADE,
+    SEEING_UPGRADE,
+};
+
+enum MovingUpgrade {
+    JUMP_UPGRADE,
+    HIDE_UPGRADE,
+};
+
+enum ShootingUpgrade {
+    LONG_SHOT_UPGRADE,
+    SEMI_AUTO_UPGRADE,
+    THIRTY_SHOT_UPGRADE,
+};
+
+enum SeeingUpgrade {
+    SCOUT_UPGRADE,
+    TRACK_UPGRADE,
+};
+
+#endif
