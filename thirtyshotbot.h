@@ -1,3 +1,15 @@
+/**********|**********|**********|
+ Program: ThirtyShotBot.h
+ Course: OOPDS
+ Trimester: 2510
+ Name: Lim E Jac
+ ID: 242UC245BG
+ Lecture Section: TC1L
+ Tutorial Section: TT2L
+ Email: LIM.E.JAC@student.mmu.edu.my
+ Phone: 017-7026113
+ **********|**********|**********/
+
 #ifndef THIRTYSHOTBOT_H
 #define THIRTYSHOTBOT_H
 
@@ -11,8 +23,8 @@
 
 class ThirtyShotBot : public virtual GenericRobot {
 public:
-    ThirtyShotBot(const string& name, int startX, int startY, int w, int h)
-        : GenericRobot(name, startX, startY, w, h) {
+    ThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, startX, startY, w, h, battlefield) {
         chooseShootingUpgrade("ThirtyShotBot");
         shells = 30; // Override to 30 shells
     }
@@ -26,9 +38,11 @@ public:
 // ThirtyShot + Hide
 class ThirtyShotHideBot : public virtual ThirtyShotBot, public virtual HideBot {
 public:
-    ThirtyShotHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); HideBot::think(); }
+    ThirtyShotHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
+    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Hide" << endl;
         ThirtyShotBot::displayStats();
@@ -39,9 +53,11 @@ public:
 // ThirtyShot + Jump
 class ThirtyShotJumpBot : public virtual ThirtyShotBot, public virtual JumpBot {
 public:
-    ThirtyShotJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); JumpBot::think(); }
+    ThirtyShotJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
+    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Jump" << endl;
         ThirtyShotBot::displayStats();
@@ -52,9 +68,11 @@ public:
 // ThirtyShot + Scout
 class ThirtyShotScoutBot : public virtual ThirtyShotBot, public virtual ScoutBot {
 public:
-    ThirtyShotScoutBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), ScoutBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); ScoutBot::think(); }
+    ThirtyShotScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          ScoutBot(name, x, y, w, h, battlefield) {}
+    
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Scout" << endl;
         ThirtyShotBot::displayStats();
@@ -65,9 +83,10 @@ public:
 // ThirtyShot + Track
 class ThirtyShotTrackBot : public virtual ThirtyShotBot, public virtual TrackBot {
 public:
-    ThirtyShotTrackBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), TrackBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); TrackBot::think(); }
+    ThirtyShotTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield) {}
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Track" << endl;
         ThirtyShotBot::displayStats();
@@ -78,9 +97,12 @@ public:
 // ThirtyShot + Hide + Scout
 class ThirtyShotHideScoutBot : public virtual ThirtyShotBot, public virtual HideBot, public virtual ScoutBot {
 public:
-    ThirtyShotHideScoutBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), HideBot(name, x, y, w, h), ScoutBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); HideBot::think(); ScoutBot::think(); }
+    ThirtyShotHideScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield),
+          ScoutBot(name, x, y, w, h, battlefield) {}
+    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Hide + Scout" << endl;
         ThirtyShotBot::displayStats();
@@ -92,9 +114,12 @@ public:
 // ThirtyShot + Hide + Track
 class ThirtyShotHideTrackBot : public virtual ThirtyShotBot, public virtual HideBot, public virtual TrackBot {
 public:
-    ThirtyShotHideTrackBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), HideBot(name, x, y, w, h), TrackBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); HideBot::think(); TrackBot::think(); }
+    ThirtyShotHideTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield) {}
+    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Hide + Track" << endl;
         ThirtyShotBot::displayStats();
@@ -106,9 +131,12 @@ public:
 // ThirtyShot + Jump + Scout
 class ThirtyShotJumpScoutBot : public virtual ThirtyShotBot, public virtual JumpBot, public virtual ScoutBot {
 public:
-    ThirtyShotJumpScoutBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), JumpBot(name, x, y, w, h), ScoutBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); JumpBot::think(); ScoutBot::think(); }
+    ThirtyShotJumpScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield),
+          ScoutBot(name, x, y, w, h, battlefield) {}
+    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Jump + Scout" << endl;
         ThirtyShotBot::displayStats();
@@ -120,9 +148,12 @@ public:
 // ThirtyShot + Jump + Track
 class ThirtyShotJumpTrackBot : public virtual ThirtyShotBot, public virtual JumpBot, public virtual TrackBot {
 public:
-    ThirtyShotJumpTrackBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), JumpBot(name, x, y, w, h), TrackBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); JumpBot::think(); TrackBot::think(); }
+    ThirtyShotJumpTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield) {}
+    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Jump + Track" << endl;
         ThirtyShotBot::displayStats();
@@ -134,9 +165,12 @@ public:
 // ThirtyShot + Track + Hide
 class ThirtyShotTrackHideBot : public virtual ThirtyShotBot, public virtual TrackBot, public virtual HideBot {
 public:
-    ThirtyShotTrackHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), TrackBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); TrackBot::think(); HideBot::think(); }
+    ThirtyShotTrackHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
+    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Track + Hide" << endl;
         ThirtyShotBot::displayStats();
@@ -148,9 +182,12 @@ public:
 // ThirtyShot + Track + Jump
 class ThirtyShotTrackJumpBot : public virtual ThirtyShotBot, public virtual TrackBot, public virtual JumpBot {
 public:
-    ThirtyShotTrackJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), TrackBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); TrackBot::think(); JumpBot::think(); }
+    ThirtyShotTrackJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          TrackBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
+    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Track + Jump" << endl;
         ThirtyShotBot::displayStats();
@@ -162,9 +199,12 @@ public:
 // ThirtyShot + Scout + Hide
 class ThirtyShotScoutHideBot : public virtual ThirtyShotBot, public virtual ScoutBot, public virtual HideBot {
 public:
-    ThirtyShotScoutHideBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), ScoutBot(name, x, y, w, h), HideBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); ScoutBot::think(); HideBot::think(); }
+    ThirtyShotScoutHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          ScoutBot(name, x, y, w, h, battlefield),
+          HideBot(name, x, y, w, h, battlefield) {}
+    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Scout + Hide" << endl;
         ThirtyShotBot::displayStats();
@@ -176,9 +216,12 @@ public:
 // ThirtyShot + Scout + Jump
 class ThirtyShotScoutJumpBot : public virtual ThirtyShotBot, public virtual ScoutBot, public virtual JumpBot {
 public:
-    ThirtyShotScoutJumpBot(const string& name, int x, int y, int w, int h)
-        : GenericRobot(name, x, y, w, h), ThirtyShotBot(name, x, y, w, h), ScoutBot(name, x, y, w, h), JumpBot(name, x, y, w, h) {}
-    void think() override { ThirtyShotBot::think(); ScoutBot::think(); JumpBot::think(); }
+    ThirtyShotScoutJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
+        : GenericRobot(name, x, y, w, h, battlefield),
+          ThirtyShotBot(name, x, y, w, h, battlefield),
+          ScoutBot(name, x, y, w, h, battlefield),
+          JumpBot(name, x, y, w, h, battlefield) {}
+    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Scout + Jump" << endl;
         ThirtyShotBot::displayStats();
