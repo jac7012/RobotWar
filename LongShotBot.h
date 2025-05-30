@@ -29,7 +29,7 @@ public:
         chooseShootingUpgrade("LongShotBot");
     }
 
-    // Override to allow shooting up to range 3 (Manhattan distance)
+    // Override to allow shooting up to range 3
     void fire(int x, int y) override {
         if (shells <= 0) {
             return; // no shells left, cannot shoot
