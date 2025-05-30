@@ -12,65 +12,67 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include "Constants.h"
 #include <cstdlib>
 #include <ctime>
 #include <vector>
-#include <string>
 #include <algorithm>
-#include "Position.h"
 
-using namespace std;
-
-namespace Utilities {
+class Utilities {
+public:
     // Initialize random seed
-    inline void initRandom() {
+    static void initRandom() {
         srand(static_cast<unsigned>(time(nullptr)));
     }
-    
-    // Generate random number between min and max
-    inline int randomInt(int min, int max) {
-        return min + rand() % (max - min + 1);
+
+    // Generate random number between min and max (inclusive)
+    static int randomInt(int min, int max) {
+        return min + (rand() % (max - min + 1));
     }
-    
-    // Check if a position is within battlefield bounds
-    inline bool isInBounds(int x, int y, int width, int height) {
-        return x >= 0 && x < width && y >= 0 && y < height;
-    }
-    
+
     // Calculate distance between two positions
-    inline int calculateDistance(const Position& p1, const Position& p2) {
-        return abs(p1.robotPositionX - p2.robotPositionX) + abs(p1.robotPositionY - p2.robotPositionY);
+    static int calculateDistance(const Position& pos1, const Position& pos2) {
+        return abs(pos1.robotPositionX - pos2.robotPositionX) + 
+               abs(pos1.robotPositionY - pos2.robotPositionY);
     }
-    
-    // Find a random empty position on the battlefield
-    inline Position findRandomEmptyPosition(int width, int height, const vector<vector<char>>& grid) {
-        Position pos;
-        do {
-            pos.robotPositionX = randomInt(0, width - 1);
-            pos.robotPositionY = randomInt(0, height - 1);
-        } while (grid[pos.robotPositionX][pos.robotPositionY] != '.');
-        return pos;
+
+    // Check if position is valid on battlefield
+    static bool isValidPosition(const Position& pos, int width, int height) {
+        return (pos.robotPositionX >= 0 && pos.robotPositionX < width &&
+                pos.robotPositionY >= 0 && pos.robotPositionY < height);
     }
-    
-    // Direction enum for movement
-    enum Direction {
-        UP, UP_LEFT, UP_RIGHT, 
-        LEFT, RIGHT, 
-        DOWN, DOWN_LEFT, DOWN_RIGHT
-    };
-    
-    // Convert direction to dx, dy
-    inline pair<int, int> directionToDelta(Direction dir) {
+
+    // Convert direction enum to string
+    static string directionToString(Direction dir) {
         switch (dir) {
-            case UP: return {0, 1};
-            case UP_LEFT: return {-1, 1};
-            case UP_RIGHT: return {1, 1};
-            case LEFT: return {-1, 0};
-            case RIGHT: return {1, 0};
-            case DOWN: return {0, -1};
-            case DOWN_LEFT: return {-1, -1};
-            case DOWN_RIGHT: return {1, -1};
-            default: return {0, 0};
+            case UP: return "Up";
+            case DOWN: return "Down";
+            case LEFT: return "Left";
+            case RIGHT: return "Right";
+            case UP_LEFT: return "Up-Left";
+            case UP_RIGHT: return "Up-Right";
+            case DOWN_LEFT: return "Down-Left";
+            case DOWN_RIGHT: return "Down-Right";
+            case NONE: return "None";
+            default: return "Unknown";
+        }
+    }
+
+    // Convert robot type to string
+    static string robotTypeToString(RobotType type) {
+        switch (type) {
+            case GENERIC_ROBOT: return "GenericRobot";
+            case FIRE_ROBOT: return "FireRobot";
+            case RECON_ROBOT: return "ReconRobot";
+            case FAST_ROBOT: return "FastRobot";
+            case JUMP_BOT: return "JumpBot";
+            case LONG_SHOT_BOT: return "LongShotBot";
+            case SEMI_AUTO_BOT: return "SemiAutoBot";
+            case THIRTY_SHOT_BOT: return "ThirtyShotBot";
+            case SCOUT_BOT: return "ScoutBot";
+            case TRACK_BOT: return "TrackBot";
+            case HIDE_BOT: return "HideBot";
+            default: return "Unknown";
         }
     }
 };
