@@ -1,5 +1,5 @@
 /**********|**********|**********|
- Program: hibeBot.h
+ Program: SemiAutoBot.h
  Course: OOPDS
  Trimester: 2510
  Name: Lim E Jac
