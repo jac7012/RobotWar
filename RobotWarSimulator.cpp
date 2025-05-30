@@ -1,5 +1,3 @@
-// === UPDATED RobotWarSimulator.cpp ===
-
 /**********|**********|**********|
 Program: RobotWarSimulator.cpp
 Course: OOPDS
