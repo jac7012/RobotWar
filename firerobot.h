@@ -4,6 +4,7 @@
 #include "robot.h"
 #include "battlefield.h"
 #include "Constants.h"
+#include "genericrobot.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -23,7 +24,7 @@ class FireRobot: public Robot, public ShootingRobot
     public:
 
         FireRobot(const std::string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : Robot(name, startX, startY, w, h,battlefield), battlefield(battlefield)
+        : Robot(name, startX, startY, w, h), battlefield(battlefield)
         {
             battlefield -> placeRobot(this, startX, startY);// put inside battlefield and set initial position
             resetTurnFlags();
@@ -87,18 +88,6 @@ class FireRobot: public Robot, public ShootingRobot
           }
         }
 
-};
-
-
-
-
-    bool canUpgrade() const override {
-        return false;
-    }
-
-    void upgrade(const std::string& upgradeType) override {
-        std::cout << name << " cannot upgrade.\n";
-    }
 };
 
 #endif
