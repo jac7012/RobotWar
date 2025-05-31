@@ -118,6 +118,9 @@ public:
         return height;
     }
 
+    // Add this declaration for display manager access
+    Robot* getRobotAt(int x, int y) const;
+
     //for upgrades
     Robot* getRobotAt(int x, int y)
     {
