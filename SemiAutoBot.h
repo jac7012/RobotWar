@@ -1,3 +1,5 @@
+#pragma once
+
 /**********|**********|**********|
  Program: SemiAutoBot.h
  Course: OOPDS
@@ -10,29 +12,11 @@
  Phone: 017-7026113
  **********|**********|**********/
 
-#ifndef SEMIAUTOBOT_H
-#define SEMIAUTOBOT_H
-
-
-class TrackBot;
-class ThirtyShotBot;
-class JumpBot;
-class HideBot;
-class LongShotBot;
-class ScoutBot;
-class GenericRobot;
-
 #include "genericrobot.h"
 #include "battlefield.h"
 #include "Constants.h"
-#include "trackbot.h"
-#include "thirtyshotbot.h"
-#include "LongShotBot.h"
-#include "HideBot.h"
-#include "scoutbot.h"
-#include "JumpBot.h"
 
-class SemiAutoBot : public virtual GenericRobot {
+class SemiAutoBot : public virtual GenericRobot , public virtual ShootingRobot {
 public:
     SemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, startX, startY, w, h, battlefield) {
@@ -40,7 +24,7 @@ public:
     }
 
     // Fire 3 times at normal range (adjacent squares), higher chance to hit
-    void fire(int x, int y) override {
+    void fire(Battlefield& battlefield, int x, int y) override {
         if (shells <= 0) {
             return; // no shells left, cannot shoot
         }
@@ -55,22 +39,19 @@ public:
         int targetX = pos.robotPositionX + x;
         int targetY = pos.robotPositionY + y;
 
-        Battlefield* bf = this->getBattlefield();
-        if (!bf) return;
-
-        if (targetX < 0 || targetX >= bf->getWidth() ||
-            targetY < 0 || targetY >= bf->getHeight()) {
+        if (targetX < 0 || targetX >= battlefield.getWidth() ||
+            targetY < 0 || targetY >= battlefield.getHeight()) {
             return;
         }
 
-        Robot* target = bf->getRobotAt(targetX, targetY);
+        Robot* target = battlefield.getRobotAt(targetX, targetY);
         if (target != nullptr && target->isAlive()) {
             bool hit = false;
             for (int i = 0; i < 3; ++i) {
                 if (rand() % 100 < 70) {
                     hit = true;
                     cout << name << " hit " << target->getName() << " with burst shot!" << endl;
-                    target->takeDamage(name, bf);
+                    target->takeDamage(name, &battlefield);
                 }
             }
             if (!hit) {
@@ -135,110 +116,3 @@ public:
         JumpBot::displayStats();
     }
 };
-
-//2nd upgrade
-// SemiAuto + Jump + Scout
-class SemiAutoJumpScoutBot : public virtual SemiAutoBot, public virtual JumpBot, public virtual ScoutBot {
-public:
-    SemiAutoJumpScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Jump + Scout" << endl;
-        SemiAutoBot::displayStats();
-        JumpBot::displayStats();
-        ScoutBot::displayStats();
-    }
-};
-
-// SemiAuto + Jump + Track
-class SemiAutoJumpTrackBot : public virtual SemiAutoBot, public virtual JumpBot, public virtual TrackBot {
-public:
-    SemiAutoJumpTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Jump + Track" << endl;
-        SemiAutoBot::displayStats();
-        JumpBot::displayStats();
-        TrackBot::displayStats();
-    }
-};
-
-// SemiAuto + Hide + Scout
-class SemiAutoHideScoutBot : public virtual SemiAutoBot, public virtual HideBot, public virtual ScoutBot {
-public:
-    SemiAutoHideScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Hide + Scout" << endl;
-        SemiAutoBot::displayStats();
-        HideBot::displayStats();
-        ScoutBot::displayStats();
-    }
-};
-
-// SemiAuto + Hide + Track
-class SemiAutoHideTrackBot : public virtual SemiAutoBot, public virtual HideBot, public virtual TrackBot {
-public:
-    SemiAutoHideTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Hide + Track" << endl;
-        SemiAutoBot::displayStats();
-        HideBot::displayStats();
-        TrackBot::displayStats();
-    }
-};
-
-// SemiAuto + Track + Hide
-class SemiAutoTrackHideBot : public virtual SemiAutoBot, public virtual TrackBot, public virtual HideBot {
-public:
-    SemiAutoTrackHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Track + Hide" << endl;
-        SemiAutoBot::displayStats();
-        TrackBot::displayStats();
-        HideBot::displayStats();
-    }
-};
-
-// SemiAuto + Track + Jump
-class SemiAutoTrackJumpBot : public virtual SemiAutoBot, public virtual TrackBot, public virtual JumpBot {
-public:
-    SemiAutoTrackJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Track + Jump" << endl;
-        SemiAutoBot::displayStats();
-        TrackBot::displayStats();
-        JumpBot::displayStats();
-    }
-};
-
-// SemiAuto + Scout + Hide
-class SemiAutoScoutHideBot : public virtual SemiAutoBot, public virtual ScoutBot, public virtual HideBot {
-public:
-    SemiAutoScoutHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Scout + Hide" << endl;
-        SemiAutoBot::displayStats();
-        ScoutBot::displayStats();
-        HideBot::displayStats();
-    }
-};
-
-// SemiAuto + Scout + Jump
-class SemiAutoScoutJumpBot : public virtual SemiAutoBot, public virtual ScoutBot, public virtual JumpBot {
-public:
-    SemiAutoScoutJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: SemiAuto + Scout + Jump" << endl;
-        SemiAutoBot::displayStats();
-        ScoutBot::displayStats();
-        JumpBot::displayStats();
-    }
-};
-
-#endif
