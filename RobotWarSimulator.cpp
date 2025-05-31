@@ -177,3 +177,140 @@ int main() {
     for (Robot* r : robots) delete r;
     return 0;
 }
+
+// ---- Battlefield method implementations ----
+
+Battlefield::Battlefield(int width, int height)
+    : width(width), height(height)
+{
+    grid.resize(width, std::vector<Robot*>(height, nullptr));
+}
+
+Battlefield::~Battlefield()
+{
+    for (Robot* robot : robots)
+    {
+        delete robot;
+    }
+}
+
+void Battlefield::display() const
+{
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            if (grid[x][y] == nullptr)
+                cout << ". ";
+            else
+                cout << grid[x][y]->getName()[0] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void Battlefield::placeRobot(Robot* robot, int x, int y)
+{
+    grid[x][y] = robot;
+    robots.push_back(robot);
+    robot->setPosition(x, y);
+}
+
+void Battlefield::placeRobotRandomly(Robot* robot)
+{
+    Position pos = findRandomEmptyPosition();
+    placeRobot(robot, pos.robotPositionX, pos.robotPositionY);
+}
+
+void Battlefield::moveRobot(Robot* robot, int newX, int newY)
+{
+    Position currentPos = robot->getPosition();
+    grid[currentPos.robotPositionX][currentPos.robotPositionY] = nullptr;
+    grid[newX][newY] = robot;
+    robot->setPosition(newX, newY);
+}
+
+void Battlefield::logResults(const std::string& filename) const
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Cannot open file " << filename << " for writing!" << endl;
+        return;
+    }
+
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            if (grid[x][y] == nullptr)
+                file << ". ";
+            else
+                file << "R ";
+        }
+        file << endl;
+    }
+    file.close();
+}
+
+Robot* Battlefield::getRobotAt(int x, int y) const
+{
+    if (!isInBounds(x, y))
+        return nullptr;
+    return grid[x][y];
+}
+
+Robot* Battlefield::getRobotAt(int x, int y)
+{
+    if (!isInBounds(x, y))
+        return nullptr;
+    return grid[x][y];
+}
+
+bool Battlefield::isValidMove(const Position& pos)
+{
+    return isInBounds(pos.robotPositionX, pos.robotPositionY) && isEmpty(pos.robotPositionX, pos.robotPositionY);
+}
+
+void Battlefield::revealAllToRobot(Robot* robot)
+{
+    cout << "Revealing all robots to " << robot->getName() << ":" << endl;
+    for (Robot* r : robots)
+    {
+        cout << r->getName() << " at (" << r->getX() << ", " << r->getY() << ")" << endl;
+    }
+}
+
+Robot* Battlefield::getRobotByName(const std::string& name)
+{
+    for (Robot* r : robots)
+    {
+        if (r->getName() == name)
+            return r;
+    }
+    return nullptr;
+}
+
+Position Battlefield::findRandomEmptyPosition() const
+{
+    Position pos;
+    do
+    {
+        pos.robotPositionX = rand() % width;
+        pos.robotPositionY = rand() % height;
+    } while (!isEmpty(pos.robotPositionX, pos.robotPositionY));
+    return pos;
+}
+
+bool Battlefield::isEmpty(int x, int y) const
+{
+    if (!isInBounds(x, y)) return false;
+    return grid[x][y] == nullptr;
+}
+
+void Battlefield::removeRobot(Robot* robot)
+{
+    Position pos = robot->getPosition();
+    if (isInBounds(pos.robotPositionX, pos.robotPositionY))
+        grid[pos.robotPositionX][pos.robotPositionY] = nullptr;
+}
