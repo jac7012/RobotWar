@@ -13,15 +13,11 @@
 #define DISPLAYMANAGER_H
 
 #include "battlefield.h"
-#include "robot.h"
+#include "Constants.h"
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
 #include <iomanip>
 #include <ctime>
-
-using namespace std;
 
 class DisplayManager {
 private:
@@ -30,15 +26,16 @@ private:
     
 public:
     DisplayManager() {
-        // Create a timestamped log file
         time_t now = time(0);
         tm* ltm = localtime(&now);
-        logFilename = "battle_log_" + 
+        logFilename = Constants::LOG_DIRECTORY + 
+                     "battle_log_" + 
                      to_string(1900 + ltm->tm_year) + "_" +
                      to_string(1 + ltm->tm_mon) + "_" +
                      to_string(ltm->tm_mday) + "_" +
                      to_string(ltm->tm_hour) + "_" +
-                     to_string(ltm->tm_min) + ".txt";
+                     to_string(ltm->tm_min) + 
+                     Constants::LOG_EXTENSION;
         logFile.open(logFilename);
     }
 
@@ -48,53 +45,47 @@ public:
         }
     }
 
-    // Display the battlefield grid
     void displayBattlefield(const Battlefield& battlefield) {
-        cout << "\nCurrent Battlefield:\n";
-        cout << "  ";
+        cout << Constants::Colors::CYAN << "\nCurrent Battlefield:\n  ";
         for (int x = 0; x < battlefield.getWidth(); ++x) {
-            cout << setw(2) << x % 10; // Show coordinates (single digit for readability)
+            cout << setw(2) << x % 10;
         }
-        cout << "\n";
+        cout << Constants::Colors::RESET << "\n";
 
         for (int y = battlefield.getHeight()-1; y >= 0; --y) {
-            cout << setw(2) << y;
+            cout << Constants::Colors::CYAN << setw(2) << y << Constants::Colors::RESET;
             for (int x = 0; x < battlefield.getWidth(); ++x) {
                 Robot* robot = battlefield.getRobotAt(x, y);
                 if (robot) {
-                    cout << " " << robot->getName()[0]; // Show first letter of robot name
+                    cout << " " << robot->getName()[0];
                 } else {
-                    cout << " .";
+                    cout << " " << Constants::EMPTY_CELL;
                 }
             }
             cout << "\n";
         }
         
-        // Log to file
         logFile << "\nBattlefield State:\n";
         for (int y = battlefield.getHeight()-1; y >= 0; --y) {
             for (int x = 0; x < battlefield.getWidth(); ++x) {
                 Robot* robot = battlefield.getRobotAt(x, y);
-                logFile << (robot ? robot->getName()[0] : '.') << " ";
+                logFile << (robot ? robot->getName()[0] : Constants::EMPTY_CELL) << " ";
             }
             logFile << "\n";
         }
     }
 
-    // Display turn information
     void displayTurnInfo(int turn) {
         string turnHeader = "=== Turn " + to_string(turn) + " ===";
         cout << "\n" << turnHeader << "\n";
         logFile << "\n" << turnHeader << "\n";
     }
 
-    // Display robot action
     void displayAction(const string& action) {
         cout << "  " << action << "\n";
         logFile << "  " << action << "\n";
     }
 
-    // Display robot stats
     void displayRobotStats(const Robot& robot) {
         cout << "  " << robot.getName() << " - Lives: " << robot.getLives() 
              << ", Shells: " << robot.getShells() << "\n";
@@ -102,7 +93,6 @@ public:
                 << ", Shells: " << robot.getShells() << "\n";
     }
 
-    // Display game over message
     void displayGameOver(const vector<Robot*>& robots) {
         int aliveCount = 0;
         string winner;
@@ -125,5 +115,4 @@ public:
         }
     }
 };
-
 #endif
