@@ -14,7 +14,11 @@
 
 using namespace std;
 
-class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, public ShootingRobot, public MovingRobot
+class GenericRobot: public virtual Robot,
+                    public virtual ThinkingRobot,
+                    public virtual SeeingRobot,
+                    public virtual ShootingRobot,
+                    public virtual MovingRobot
 {
     private:
         Battlefield* battlefield;   // to access robot position
@@ -44,6 +48,13 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
         : Robot(name, startX, startY, w, h), battlefield(battlefield)
         {
             battlefield -> placeRobot(this, startX, startY);// put inside battlefield and set initial position
+            resetTurnFlags();
+        }
+
+        GenericRobot()
+        : Robot("Default", 0, 0, 1, 1), battlefield(nullptr)
+        {
+            // Set other member defaults as needed
             resetTurnFlags();
         }
 
@@ -309,6 +320,8 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
             cout << "Upgrade not available: " << upgradeName << endl;
         }
     }
+
+    
 
 };
 
