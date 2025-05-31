@@ -23,12 +23,12 @@ Phone: 0174081106
 #include "reconrobot.h"
 #include "fastrobot.h"
 
-#include "jumpbot.h"
-#include "hidebot.h"
+#include "JumpBot.h"
+#include "HideBot.h"
 #include "scoutbot.h"
 #include "trackbot.h"
-#include "longshotbot.h"
-#include "semiautobot.h"
+#include "LongShotBot.h"
+#include "SemiAutoBot.h"
 #include "thirtyshotbot.h"
 
 #include "battlefield.h"
