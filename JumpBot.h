@@ -20,6 +20,7 @@
 #include "SemiAutoBot.h"
 #include "hideBot.h"
 #include "ScoutBot.h"
+#include "Constants.h"
 
 using namespace std;
 
