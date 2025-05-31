@@ -42,7 +42,7 @@ public:
         if (scoutCount > 0) {
             cout << name << " is scouting the entire battlefield!\n";
             battlefield.revealAllToRobot(this);
-            scoutCount--;
+            scoutCount--; // Deducts scoutCount each time scout is used
             cout << "(" << scoutCount << " scouts remaining)\n";
         }
     }
