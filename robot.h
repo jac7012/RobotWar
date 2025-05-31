@@ -13,6 +13,7 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#include "battlefield.h"  
 #include "Constants.h"
 #include <iostream>
 #include <cstdlib>
