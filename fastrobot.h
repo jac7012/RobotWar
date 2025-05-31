@@ -1,3 +1,15 @@
+/**********|**********|**********|
+ Program: robot.h
+ Course: OOPDS
+ Trimester: 2510
+ Name: Bianca Lau Ying Xuan
+ ID: 242UC2426R
+ Lecture Section: TC1L
+ Tutorial Section: TT2L
+ Email: BIANCA.LAU.YING@student.mmu.edu.my
+ Phone: 010-2752246
+  **********|**********|**********/
+
 #ifndef FASTROBOT_H
 #define FASTROBOT_H
 
