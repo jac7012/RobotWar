@@ -20,6 +20,7 @@
 #include "ThirtyShotBot.h"
 #include "SemiAutoBot.h"
 #include "LongShotBot.h"
+#include "Constants.h"
 #include <map>
 
 class TrackBot : public virtual GenericRobot {
