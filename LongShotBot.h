@@ -21,6 +21,7 @@
 #include "ScoutBot.h"
 #include "HideBot.h"
 #include "battlefield.h"
+#include "Constants.h"
 
 class LongShotBot : public virtual GenericRobot {
 public:
