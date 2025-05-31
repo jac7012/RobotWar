@@ -13,14 +13,15 @@
 #ifndef THIRTYSHOTBOT_H
 #define THIRTYSHOTBOT_H
 
-#include "GenericRobot.h"
-#include "JumpBot.h"
-#include "TrackBot.h"
-#include "ScoutBot.h"
-#include "HideBot.h"
-#include "SemiAutoBot.h"
-#include "LongShotBot.h"
+#include "genericrobot.h"
+#include "battlefield.h"
 #include "Constants.h"
+#include "trackbot.h"
+#include "LongShotBot.h"
+#include "SemiAutoBot.h"
+#include "HideBot.h"
+#include "scoutbot.h"
+#include "JumpBot.h"
 
 class ThirtyShotBot : public virtual GenericRobot {
 public:
