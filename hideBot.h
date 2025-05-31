@@ -10,15 +10,15 @@
  Phone: 017-7026113
  **********|**********|**********/
 
- #ifndef HIDEBOT_H
+#ifndef HIDEBOT_H
 #define HIDEBOT_H
 
-#include "GenericRobot.h"
+#include "genericrobot.h"
 #include "LongShotBot.h"
 #include "SemiAutoBot.h"
-#include "ThirtyShotBot.h"
-#include "ScoutBot.h"
-#include "TrackBot.h"
+#include "thirtyshotbot.h"
+#include "scoutbot.h"
+#include "trackbot.h"
 #include "JumpBot.h"
 #include "Constants.h"
 
