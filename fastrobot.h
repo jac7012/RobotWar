@@ -1,5 +1,5 @@
 /**********|**********|**********|
- Program: robot.h
+ Program: fastrobot.h
  Course: OOPDS
  Trimester: 2510
  Name: Bianca Lau Ying Xuan
