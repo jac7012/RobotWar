@@ -7,10 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
-#include <string>
-#include <iostream>
-#include <fstream>
-using namespace std; 
+
 
 
 
