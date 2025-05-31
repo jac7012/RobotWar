@@ -14,6 +14,14 @@
 #define SEMIAUTOBOT_H
 
 
+class TrackBot;
+class ThirtyShotBot;
+class JumpBot;
+class HideBot;
+class LongShotBot;
+class ScoutBot;
+class GenericRobot;
+
 #include "genericrobot.h"
 #include "battlefield.h"
 #include "Constants.h"
