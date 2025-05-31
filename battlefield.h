@@ -1,5 +1,5 @@
 /**********|**********|**********|
- Program: robot.h
+ Program: battlefield.h
  Course: OOPDS
  Trimester: 2510
  Name: Bianca Lau Ying Xuan
