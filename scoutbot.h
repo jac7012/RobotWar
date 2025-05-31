@@ -13,16 +13,16 @@
 #ifndef SCOUTBOT_H
 #define SCOUTBOT_H
 
-#include "GenericRobot.h"
-#include "Battlefield.h"
-#include "TrackBot.h"
-#include "ThirtyShotBot.h"
+
+#include "genericrobot.h"
+#include "battlefield.h"
+#include "Constants.h"
+#include "trackbot.h"
+#include "thirtyshotbot.h"
 #include "SemiAutoBot.h"
+#include "HideBot.h"
 #include "LongShotBot.h"
 #include "JumpBot.h"
-#include "hideBot.h"
-#include "Constants.h"
-#include <string>
 
 using namespace std;
 
@@ -33,12 +33,12 @@ private:
 
 public:
     ScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h), scoutCount(2) {
+        : GenericRobot(name, startX, startY, w, h, battlefield), scoutCount(2) {
         this->battlefield = battlefield;
         chooseSeeingUpgrade("ScoutBot");
     }
 
-    void scout(Battlefield& battlefield) override {
+    void scout(Battlefield& battlefield) {
         if (scoutCount > 0) {
             cout << name << " is scouting the entire battlefield!\n";
             battlefield.revealAllToRobot(this);
@@ -57,7 +57,7 @@ public:
 class ScoutThirtyShotBot : public virtual ScoutBot, public virtual ThirtyShotBot {
 public:
     ScoutThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h), 
+        : GenericRobot(name, startX, startY, w, h, battlefield), 
           ScoutBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
 
@@ -91,8 +91,8 @@ public:
           ScoutBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
 
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(battlefield, x, y);
+    void fire(int x, int y) {
+        LongShotBot::fire(x, y);
     }
 
     void displayStats() const override {
