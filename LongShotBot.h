@@ -13,15 +13,16 @@
 #ifndef LONGSHOTBOT_H
 #define LONGSHOTBOT_H
 
-#include "GenericRobot.h"
-#include "JumpBot.h"
-#include "TrackBot.h"
-#include "ThirtyShotBot.h"
-#include "SemiAutoBot.h"
-#include "ScoutBot.h"
-#include "HideBot.h"
+
+#include "genericrobot.h"
 #include "battlefield.h"
 #include "Constants.h"
+#include "trackbot.h"
+#include "thirtyshotbot.h"
+#include "SemiAutoBot.h"
+#include "HideBot.h"
+#include "scoutbot.h"
+#include "JumpBot.h"
 
 class LongShotBot : public virtual GenericRobot {
 public:
@@ -45,7 +46,7 @@ public:
         int targetY = pos.robotPositionY + y;
 
         // Use the battlefield pointer from GenericRobot
-        Battlefield* bf = this->battlefield;
+        Battlefield* bf = this->getBattlefield();
         if (!bf) return;
 
         if (targetX < 0 || targetX >= bf->getWidth() ||
@@ -58,7 +59,6 @@ public:
             if (rand() % 100 < 70) {
                 cout << name << " sniped and killed " << target->getName() << " from long range!" << endl;
                 target->takeDamage(name, bf);
-                target->setAlive(false);
             } else {
                 cout << name << " missed the long-range shot at " << target->getName() << "." << endl;
             }
