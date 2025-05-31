@@ -14,6 +14,14 @@
 #define LONGSHOTBOT_H
 
 
+class TrackBot;
+class ThirtyShotBot;
+class SemiAutoBot;
+class HideBot;
+class JumpBot;
+class ScoutBot;
+class GenericRobot;
+
 #include "genericrobot.h"
 #include "battlefield.h"
 #include "Constants.h"
