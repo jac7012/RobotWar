@@ -85,7 +85,6 @@ class SemiAutoScoutBot : public virtual SemiAutoBot, public virtual ScoutBot {
 public:
     SemiAutoScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Scout" << endl;
         SemiAutoBot::displayStats();
@@ -98,7 +97,6 @@ class SemiAutoTrackBot : public virtual SemiAutoBot, public virtual TrackBot {
 public:
     SemiAutoTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Track" << endl;
         SemiAutoBot::displayStats();
@@ -111,7 +109,6 @@ class SemiAutoHideBot : public virtual SemiAutoBot, public virtual HideBot {
 public:
     SemiAutoHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Hide" << endl;
         SemiAutoBot::displayStats();
@@ -124,7 +121,6 @@ class SemiAutoJumpBot : public virtual SemiAutoBot, public virtual JumpBot {
 public:
     SemiAutoJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Jump" << endl;
         SemiAutoBot::displayStats();
@@ -138,7 +134,6 @@ class SemiAutoJumpScoutBot : public virtual SemiAutoBot, public virtual JumpBot,
 public:
     SemiAutoJumpScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Jump + Scout" << endl;
         SemiAutoBot::displayStats();
@@ -152,7 +147,6 @@ class SemiAutoJumpTrackBot : public virtual SemiAutoBot, public virtual JumpBot,
 public:
     SemiAutoJumpTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Jump + Track" << endl;
         SemiAutoBot::displayStats();
@@ -166,7 +160,7 @@ class SemiAutoHideScoutBot : public virtual SemiAutoBot, public virtual HideBot,
 public:
     SemiAutoHideScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Hide + Scout" << endl;
         SemiAutoBot::displayStats();
@@ -180,7 +174,7 @@ class SemiAutoHideTrackBot : public virtual SemiAutoBot, public virtual HideBot,
 public:
     SemiAutoHideTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
+    // think() removed
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Hide + Track" << endl;
         SemiAutoBot::displayStats();
@@ -194,7 +188,6 @@ class SemiAutoTrackHideBot : public virtual SemiAutoBot, public virtual TrackBot
 public:
     SemiAutoTrackHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Track + Hide" << endl;
         SemiAutoBot::displayStats();
@@ -208,7 +201,6 @@ class SemiAutoTrackJumpBot : public virtual SemiAutoBot, public virtual TrackBot
 public:
     SemiAutoTrackJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Track + Jump" << endl;
         SemiAutoBot::displayStats();
@@ -222,7 +214,6 @@ class SemiAutoScoutHideBot : public virtual SemiAutoBot, public virtual ScoutBot
 public:
     SemiAutoScoutHideBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Scout + Hide" << endl;
         SemiAutoBot::displayStats();
@@ -236,7 +227,6 @@ class SemiAutoScoutJumpBot : public virtual SemiAutoBot, public virtual ScoutBot
 public:
     SemiAutoScoutJumpBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield), JumpBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Scout + Jump" << endl;
         SemiAutoBot::displayStats();
