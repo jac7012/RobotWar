@@ -13,14 +13,15 @@
 #ifndef JUMPBOT_H
 #define JUMPBOT_H
 
-#include "GenericRobot.h"
-#include "Battlefield.h"
-#include "TrackBot.h"
-#include "ThirtyShotBot.h"
-#include "SemiAutoBot.h"
-#include "hideBot.h"
-#include "ScoutBot.h"
+#include "genericrobot.h"
+#include "battlefield.h"
 #include "Constants.h"
+#include "trackbot.h"
+#include "thirtyshotbot.h"
+#include "SemiAutoBot.h"
+#include "HideBot.h"
+#include "scoutbot.h"
+#include "LongShotBot.h"
 
 using namespace std;
 
