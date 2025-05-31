@@ -20,6 +20,7 @@
 #include "ScoutBot.h"
 #include "TrackBot.h"
 #include "JumpBot.h"
+#include "Constants.h"
 
 class HideBot : public virtual GenericRobot {
 private:
