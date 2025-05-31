@@ -34,7 +34,7 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
         };
 
     public:
-        // Static lists for all possible upgrade combinations
+        // Add these static member declarations
         static const vector<string> firstUpgrades;
         static const vector<string> secondUpgrades;
         static const vector<string> thirdUpgrades;
@@ -62,6 +62,10 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
                  << (currentShootingUpgrade.empty() ? "None" : currentShootingUpgrade) << endl;
         }
 
+         
+        Battlefield* getBattlefield() const { return battlefield; }
+        void setBattlefield(Battlefield* bf) { battlefield = bf; }
+        
         void resetTurnFlags()
         {
             hasThought = false;
@@ -312,45 +316,8 @@ class GenericRobot: public Robot, public ThinkingRobot,  public SeeingRobot, pub
 
 #endif
 
-
-
 /*
 main cpp,
 srand((unsigned int)time(nullptr)); // for initial random
 
 */
-
-// Define the static upgrade lists outside the class
-const vector<string> GenericRobot::firstUpgrades = {
-    "TrackBot", "ScoutBot", "SemiAutoBot", "ThirtyShotBot", "LongShotBot", "JumpBot", "HideBot"
-};
-
-const vector<string> GenericRobot::secondUpgrades = {
-    // Moving → Shooting
-    "HideLongShotBot", "HideSemiAutoBot", "HideThirtyShotBot", "JumpLongShotBot", "JumpSemiAutoBot", "JumpThirtyShotBot",
-    // Moving → Seeing
-    "HideScoutBot", "HideTrackBot", "JumpScoutBot", "JumpTrackBot",
-    // Shooting → Moving
-    "LongShotHideBot", "LongShotJumpBot", "SemiAutoHideBot", "SemiAutoJumpBot", "ThirtyShotHideBot", "ThirtyShotJumpBot",
-    // Shooting → Seeing
-    "LongShotScoutBot", "LongShotTrackBot", "SemiAutoScoutBot", "SemiAutoTrackBot", "ThirtyShotScoutBot", "ThirtyShotTrackBot",
-    // Seeing → Moving
-    "ScoutHideBot", "ScoutJumpBot", "TrackHideBot", "TrackJumpBot",
-    // Seeing → Shooting
-    "ScoutLongShotBot", "ScoutSemiAutoBot", "ScoutThirtyShotBot", "TrackLongShotBot", "TrackSemiAutoBot", "TrackThirtyShotBot"
-};
-
-const vector<string> GenericRobot::thirdUpgrades = {
-    "HideLongShotScoutBot", "HideLongShotTrackBot", "HideSemiAutoScoutBot", "HideSemiAutoTrackBot", "HideThirtyShotScoutBot", "HideThirtyShotTrackBot",
-    "JumpLongShotScoutBot", "JumpLongShotTrackBot", "JumpSemiAutoScoutBot", "JumpSemiAutoTrackBot", "JumpThirtyShotScoutBot", "JumpThirtyShotTrackBot",
-    "HideScoutLongShotBot", "HideScoutSemiAutoBot", "HideScoutThirtyShotBot", "HideTrackLongShotBot", "HideTrackSemiAutoBot", "HideTrackThirtyShotBot",
-    "JumpScoutLongShotBot", "JumpScoutSemiAutoBot", "JumpScoutThirtyShotBot", "JumpTrackLongShotBot", "JumpTrackSemiAutoBot", "JumpTrackThirtyShotBot",
-    "LongShotHideScoutBot", "LongShotHideTrackBot", "LongShotJumpScoutBot", "LongShotJumpTrackBot", "SemiAutoHideScoutBot", "SemiAutoHideTrackBot",
-    "SemiAutoJumpScoutBot", "SemiAutoJumpTrackBot", "ThirtyShotHideScoutBot", "ThirtyShotHideTrackBot", "ThirtyShotJumpScoutBot", "ThirtyShotJumpTrackBot",
-    "LongShotScoutHideBot", "LongShotScoutJumpBot", "LongShotTrackHideBot", "LongShotTrackJumpBot", "SemiAutoScoutHideBot", "SemiAutoScoutJumpBot",
-    "SemiAutoTrackHideBot", "SemiAutoTrackJumpBot", "ThirtyShotScoutHideBot", "ThirtyShotScoutJumpBot", "ThirtyShotTrackHideBot", "ThirtyShotTrackJumpBot",
-    "ScoutHideLongShotBot", "ScoutHideSemiAutoBot", "ScoutHideThirtyShotBot", "ScoutJumpLongShotBot", "ScoutJumpSemiAutoBot", "ScoutJumpThirtyShotBot",
-    "TrackHideLongShotBot", "TrackHideSemiAutoBot", "TrackHideThirtyShotBot", "TrackJumpLongShotBot", "TrackJumpSemiAutoBot", "TrackJumpThirtyShotBot",
-    "ScoutLongShotHideBot", "ScoutLongShotJumpBot", "ScoutSemiAutoHideBot", "ScoutSemiAutoJumpBot", "ScoutThirtyShotHideBot", "ScoutThirtyShotJumpBot",
-    "TrackLongShotHideBot", "TrackLongShotJumpBot", "TrackSemiAutoHideBot", "TrackSemiAutoJumpBot", "TrackThirtyShotHideBot", "TrackThirtyShotJumpBot"
-};
