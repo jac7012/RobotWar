@@ -44,7 +44,6 @@ public:
         : GenericRobot(name, x, y, w, h, battlefield),
           ThirtyShotBot(name, x, y, w, h, battlefield),
           HideBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Hide" << endl;
         ThirtyShotBot::displayStats();
@@ -59,7 +58,6 @@ public:
         : GenericRobot(name, x, y, w, h, battlefield),
           ThirtyShotBot(name, x, y, w, h, battlefield),
           JumpBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Jump" << endl;
         ThirtyShotBot::displayStats();
@@ -104,7 +102,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           HideBot(name, x, y, w, h, battlefield),
           ScoutBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Hide + Scout" << endl;
         ThirtyShotBot::displayStats();
@@ -121,7 +118,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           HideBot(name, x, y, w, h, battlefield),
           TrackBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Hide + Track" << endl;
         ThirtyShotBot::displayStats();
@@ -138,7 +134,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           JumpBot(name, x, y, w, h, battlefield),
           ScoutBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Jump + Scout" << endl;
         ThirtyShotBot::displayStats();
@@ -155,7 +150,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           JumpBot(name, x, y, w, h, battlefield),
           TrackBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Jump + Track" << endl;
         ThirtyShotBot::displayStats();
@@ -172,7 +166,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           TrackBot(name, x, y, w, h, battlefield),
           HideBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Track + Hide" << endl;
         ThirtyShotBot::displayStats();
@@ -189,7 +182,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           TrackBot(name, x, y, w, h, battlefield),
           JumpBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Track + Jump" << endl;
         ThirtyShotBot::displayStats();
@@ -206,7 +198,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           ScoutBot(name, x, y, w, h, battlefield),
           HideBot(name, x, y, w, h, battlefield) {}
-    void think() override { HideBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Scout + Hide" << endl;
         ThirtyShotBot::displayStats();
@@ -223,7 +214,6 @@ public:
           ThirtyShotBot(name, x, y, w, h, battlefield),
           ScoutBot(name, x, y, w, h, battlefield),
           JumpBot(name, x, y, w, h, battlefield) {}
-    void think() override { JumpBot::think(); }
     void displayStats() const override {
         cout << "Upgrade: ThirtyShot + Scout + Jump" << endl;
         ThirtyShotBot::displayStats();
