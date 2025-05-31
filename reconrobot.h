@@ -24,7 +24,7 @@ class ReconRobot: public Robot, public SeeingRobot, public ShootingRobot, public
     public:
         // constructor
         ReconRobot(const std::string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : Robot(name, startX, startY, w, h,battlefield), battlefield(battlefield)
+        : Robot(name, startX, startY, w, h), battlefield(battlefield)
         {
             battlefield -> placeRobot(this, startX, startY);// put inside battlefield and set initial position
             resetTurnFlags();
@@ -175,7 +175,7 @@ class ReconRobot: public Robot, public SeeingRobot, public ShootingRobot, public
        bool isValidMove(Position p)
        {
            return (p.robotPositionX >= 0 && p.robotPositionX < battlefield ->getWidth() &&
-                   p.robotPositionY >= 0 && p.robotPositionY < battlefield >getHeight());
+                   p.robotPositionY >= 0 && p.robotPositionY < battlefield->getHeight());
        }
 
        virtual void move(int direction) override
@@ -193,20 +193,8 @@ class ReconRobot: public Robot, public SeeingRobot, public ShootingRobot, public
                std::cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
            }
            }
-       }
-
-};
+       };
 
 
-
-
-    bool canUpgrade() const override {
-        return false;
-    }
-
-    void upgrade(const std::string& upgradeType) override {
-        std::cout << name << " cannot upgrade.\n";
-    }
-};
 
 #endif
