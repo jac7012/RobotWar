@@ -13,14 +13,16 @@
 #ifndef TRACKBOT_H
 #define TRACKBOT_H
 
-#include "GenericRobot.h"
-#include "Battlefield.h"
-#include "JumpBot.h"
-#include "TrackBot.h"
-#include "ThirtyShotBot.h"
-#include "SemiAutoBot.h"
-#include "LongShotBot.h"
+
+#include "genericrobot.h"
+#include "battlefield.h"
 #include "Constants.h"
+#include "LongShotBot.h"
+#include "thirtyshotbot.h"
+#include "SemiAutoBot.h"
+#include "HideBot.h"
+#include "scoutbot.h"
+#include "JumpBot.h"
 #include <map>
 
 class TrackBot : public virtual GenericRobot {
