@@ -10,10 +10,7 @@
  Phone: 017-7026113
  **********|**********|**********/
 
-#ifndef JUMPBOT_H
-#define JUMPBOT_H
-
-
+#pragma once
 class TrackBot;
 class ThirtyShotBot;
 class SemiAutoBot;
@@ -79,9 +76,6 @@ public:
         : GenericRobot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(x, y);
-    }
     void displayStats() const override {
         cout << "Upgrade: Jump + LongShot" << endl;
         JumpBot::displayStats();
@@ -185,9 +179,6 @@ public:
           JumpBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(x, y);
-    }
     void displayStats() const override {
         cout << "Upgrade: Jump + Track + LongShot" << endl;
         JumpBot::displayStats();
@@ -204,9 +195,6 @@ public:
           JumpBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(x, y);
-    }
     void displayStats() const override {
         cout << "Upgrade: Jump + Scout + LongShot" << endl;
         JumpBot::displayStats();
@@ -255,9 +243,6 @@ public:
           JumpBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield) {}
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(x, y);
-    }
     void displayStats() const override {
         cout << "Upgrade: Jump + LongShot + Scout" << endl;
         JumpBot::displayStats();
@@ -274,9 +259,6 @@ public:
           JumpBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield) {}
-    void fire(Battlefield* battlefield, int x, int y) override {
-        LongShotBot::fire(x, y);
-    }
     void displayStats() const override {
         cout << "Upgrade: Jump + LongShot + Track" << endl;
         JumpBot::displayStats();
@@ -349,5 +331,3 @@ public:
     }
 };
 
-
-#endif
