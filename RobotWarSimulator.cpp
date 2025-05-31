@@ -17,10 +17,24 @@ Phone: 0174081106
 #include <ctime>
 #include <fstream>
 #include <sstream>
+
 #include "robot.h"
-#include "scoutbot.h"
 #include "firerobot.h"
 #include "reconrobot.h"
+#include "fastrobot.h"
+
+#include "jumpbot.h"
+#include "hidebot.h"
+#include "scoutbot.h"
+#include "trackbot.h"
+#include "longshotbot.h"
+#include "semiautobot.h"
+#include "thirtyshotbot.h"
+
+#include "battlefield.h"
+#include "Constants.h"
+#include "genericrobot.h"
+#include "Utilities.h"
 using namespace std;
 
 int M, N, MAX_STEPS;
@@ -37,66 +51,38 @@ Position findRandomEmptyPosition(int rows, int cols, const vector<vector<char>>&
     return pos;
 }
 
-class GenericRobot : public Robot {
-public:
-    GenericRobot(string n, int xPos, int yPos)
-        : Robot(n, xPos, yPos, N, M) {
-        battlefield[xPos][yPos] = name[0];
-    }
-    void think() override {}
-    void look() override { cout << name << " looks around.\n"; }
-    void move() override {
-        int dx = rand() % 3 - 1, dy = rand() % 3 - 1;
-        int newX = pos.robotPositionX + dx, newY = pos.robotPositionY + dy;
-        if (newX >= 0 && newX < M && newY >= 0 && newY < N && battlefield[newX][newY] == '.') {
-            battlefield[pos.robotPositionX][pos.robotPositionY] = '.';
-            pos.robotPositionX = newX;
-            pos.robotPositionY = newY;
-            battlefield[newX][newY] = name[0];
-            cout << name << " moved to (" << newX << "," << newY << ").\n";
-        }
-    }
-    void fire() override {
-        if (shells <= 0) { handleDeath(); return; }
-        int dx = rand() % 3 - 1, dy = rand() % 3 - 1;
-        int tx = pos.robotPositionX + dx, ty = pos.robotPositionY + dy;
-        if ((dx != 0 || dy != 0) && tx >= 0 && tx < M && ty >= 0 && ty < N) {
-            for (Robot* r : robots) {
-                if (r->isLives() && r != this &&
-                    tx == r->getPosition().robotPositionX &&
-                    ty == r->getPosition().robotPositionY) {
-                    if ((rand() % 100) < 70) {
-                        r->takeDamage(100);
-                        cout << name << " fired and hit " << r->getName() << "!\n";
-                    } else {
-                        cout << name << " fired and missed.\n";
-                    }
-                    break;
-                }
-            }
-        }
-        shells--;
-    }
-    void handleDeath() {
-        battlefield[pos.robotPositionX][pos.robotPositionY] = '.';
-        lives--;
-        if (lives > 0) {
-            cout << name << " is respawning...\n";
-            Position newPos = findRandomEmptyPosition(M, N, battlefield);
-            pos = newPos; health = 100; shells = 10;
-            battlefield[newPos.robotPositionX][newPos.robotPositionY] = name[0];
-        } else {
-            alive = false;
-            cout << name << " has been destroyed.\n";
-        }
-    }
-    void displayAction() override {
-        cout << name << " is taking action.\n";
-    }
-    bool canUpgrade() const override { return false; }
-    void upgrade(const string& upgradeType) override {
-        cout << name << " does not support upgrades.\n";
-    }
+const vector<string> GenericRobot::firstUpgrades = {
+    "TrackBot", "ScoutBot", "SemiAutoBot", "ThirtyShotBot", "LongShotBot", "JumpBot", "HideBot"
+};
+
+const vector<string> GenericRobot::secondUpgrades = {
+    // Moving → Shooting
+    "HideLongShotBot", "HideSemiAutoBot", "HideThirtyShotBot", "JumpLongShotBot", "JumpSemiAutoBot", "JumpThirtyShotBot",
+    // Moving → Seeing
+    "HideScoutBot", "HideTrackBot", "JumpScoutBot", "JumpTrackBot",
+    // Shooting → Moving
+    "LongShotHideBot", "LongShotJumpBot", "SemiAutoHideBot", "SemiAutoJumpBot", "ThirtyShotHideBot", "ThirtyShotJumpBot",
+    // Shooting → Seeing
+    "LongShotScoutBot", "LongShotTrackBot", "SemiAutoScoutBot", "SemiAutoTrackBot", "ThirtyShotScoutBot", "ThirtyShotTrackBot",
+    // Seeing → Moving
+    "ScoutHideBot", "ScoutJumpBot", "TrackHideBot", "TrackJumpBot",
+    // Seeing → Shooting
+    "ScoutLongShotBot", "ScoutSemiAutoBot", "ScoutThirtyShotBot", "TrackLongShotBot", "TrackSemiAutoBot", "TrackThirtyShotBot"
+};
+
+const vector<string> GenericRobot::thirdUpgrades = {
+    "HideLongShotScoutBot", "HideLongShotTrackBot", "HideSemiAutoScoutBot", "HideSemiAutoTrackBot", "HideThirtyShotScoutBot", "HideThirtyShotTrackBot",
+    "JumpLongShotScoutBot", "JumpLongShotTrackBot", "JumpSemiAutoScoutBot", "JumpSemiAutoTrackBot", "JumpThirtyShotScoutBot", "JumpThirtyShotTrackBot",
+    "HideScoutLongShotBot", "HideScoutSemiAutoBot", "HideScoutThirtyShotBot", "HideTrackLongShotBot", "HideTrackSemiAutoBot", "HideTrackThirtyShotBot",
+    "JumpScoutLongShotBot", "JumpScoutSemiAutoBot", "JumpScoutThirtyShotBot", "JumpTrackLongShotBot", "JumpTrackSemiAutoBot", "JumpTrackThirtyShotBot",
+    "LongShotHideScoutBot", "LongShotHideTrackBot", "LongShotJumpScoutBot", "LongShotJumpTrackBot", "SemiAutoHideScoutBot", "SemiAutoHideTrackBot",
+    "SemiAutoJumpScoutBot", "SemiAutoJumpTrackBot", "ThirtyShotHideScoutBot", "ThirtyShotHideTrackBot", "ThirtyShotJumpScoutBot", "ThirtyShotJumpTrackBot",
+    "LongShotScoutHideBot", "LongShotScoutJumpBot", "LongShotTrackHideBot", "LongShotTrackJumpBot", "SemiAutoScoutHideBot", "SemiAutoScoutJumpBot",
+    "SemiAutoTrackHideBot", "SemiAutoTrackJumpBot", "ThirtyShotScoutHideBot", "ThirtyShotScoutJumpBot", "ThirtyShotTrackHideBot", "ThirtyShotTrackJumpBot",
+    "ScoutHideLongShotBot", "ScoutHideSemiAutoBot", "ScoutHideThirtyShotBot", "ScoutJumpLongShotBot", "ScoutJumpSemiAutoBot", "ScoutJumpThirtyShotBot",
+    "TrackHideLongShotBot", "TrackHideSemiAutoBot", "TrackHideThirtyShotBot", "TrackJumpLongShotBot", "TrackJumpSemiAutoBot", "TrackJumpThirtyShotBot",
+    "TrackLongShotHideBot", "TrackLongShotJumpBot", "TrackSemiAutoHideBot", "TrackSemiAutoJumpBot", "TrackThirtyShotHideBot", "TrackThirtyShotJumpBot",
+    "ScoutLongShotHideBot", "ScoutLongShotJumpBot", "ScoutSemiAutoHideBot", "ScoutSemiAutoJumpBot", "ScoutThirtyShotHideBot", "ScoutThirtyShotJumpBot"
 };
 
 void displayBattlefield() {
@@ -115,17 +101,17 @@ void simulate() {
         displayBattlefield();
 
         for (Robot* r : robots) {
-            if (r->isLives()) {
-                r->displayAction();
-                r->think();
-                r->look();
-                r->fire();
-                r->move();
+            if (r->isAlive()) {
+                // Try to call performTurn() if available
+                if (auto gr = dynamic_cast<GenericRobot*>(r)) {
+                    gr->performTurn();
+                
+                }
             }
         }
 
         int aliveCount = 0;
-        for (Robot* r : robots) if (r->isLives()) aliveCount++;
+        for (Robot* r : robots) if (r->isAlive()) aliveCount++;
         if (aliveCount <= 1) break;
     }
     cout << "\nSimulation Ended.\n";
@@ -141,6 +127,7 @@ int main() {
 
     string line;
     int robotCount = 0;
+    Battlefield* bf = nullptr;
 
     while (getline(configFile, line)) {
         istringstream iss(line);
@@ -161,13 +148,15 @@ int main() {
             int y = (yStr == "random") ? rand() % N : stoi(yStr);
 
             if (type == "GenericRobot") {
-                robots.push_back(new GenericRobot(name, x, y));
+                robots.push_back(new GenericRobot(name, x, y, N, M, bf));
             } else if (type == "FireRobot") {
-                robots.push_back(new FireRobot(name, x, y, N, M));
+                robots.push_back(new FireRobot(name, x, y, N, M, bf));
             } else if (type == "ScoutBot") {
-                robots.push_back(new ScoutBot(name, x, y, N, M));
+                robots.push_back(new ScoutBot(name, x, y, N, M, bf));
             } else if (type == "ReconRobot") {
-                robots.push_back(new ReconRobot(name, x, y, N, M));
+                robots.push_back(new ReconRobot(name, x, y, N, M, bf));
+            } else if (type == "FastRobot") {
+                robots.push_back(new FastRobot(name, x, y, N, M, bf));
             } else {
                 cerr << "Unknown robot type: " << type << endl;
             }
