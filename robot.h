@@ -43,6 +43,11 @@ class Robot
        int battlefieldHeight;
 
     public:
+       // Default constructor
+       Robot()
+           : name("Default"), pos{0, 0}, lives(3), shells(10), upgradeLevel(0),
+             battlefieldWidth(1), battlefieldHeight(1), alive(true) {}
+
        //constructor for set initial values
        Robot(const std::string& name, int startX, int startY, int w, int h)
     : name(name),
