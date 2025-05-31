@@ -4,6 +4,7 @@
 #include "robot.h"
 #include "battlefield.h"
 #include "scoutbot.h"
+#include "Constants.h"
 
 #include <iostream>
 #include <cstdlib>
