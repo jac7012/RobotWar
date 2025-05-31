@@ -82,7 +82,6 @@ public:
         : GenericRobot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide" << endl;
         LongShotBot::displayStats();
@@ -97,7 +96,6 @@ public:
         : GenericRobot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout" << endl;
         LongShotBot::displayStats();
@@ -112,7 +110,6 @@ public:
         : GenericRobot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump" << endl;
         LongShotBot::displayStats();
@@ -127,7 +124,6 @@ public:
         : GenericRobot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track" << endl;
         LongShotBot::displayStats();
@@ -143,7 +139,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump + Track" << endl;
         LongShotBot::displayStats();
@@ -160,7 +155,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide + Scout" << endl;
         LongShotBot::displayStats();
@@ -177,7 +171,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Hide + Track" << endl;
         LongShotBot::displayStats();
@@ -194,7 +187,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Jump + Scout" << endl;
         LongShotBot::displayStats();
@@ -211,7 +203,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout + Hide" << endl;
         LongShotBot::displayStats();
@@ -228,7 +219,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track + Hide" << endl;
         LongShotBot::displayStats();
@@ -245,7 +235,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           TrackBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Track + Jump" << endl;
         LongShotBot::displayStats();
@@ -262,7 +251,6 @@ public:
           LongShotBot(name, startX, startY, w, h, battlefield),
           ScoutBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: LongShot + Scout + Jump" << endl;
         LongShotBot::displayStats();
