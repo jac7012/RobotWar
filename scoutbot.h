@@ -21,7 +21,9 @@
 #include "LongShotBot.h"
 #include "JumpBot.h"
 #include "hideBot.h"
+#include "Constants.h"
 #include <string>
+
 using namespace std;
 
 class ScoutBot : public virtual GenericRobot {
