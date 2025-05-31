@@ -20,6 +20,7 @@
 #include "ScoutBot.h"
 #include "HideBot.h"
 #include "LongShotBot.h"
+#include "Constants.h"
 
 class SemiAutoBot : public virtual GenericRobot {
 public:
