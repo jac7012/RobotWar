@@ -160,7 +160,6 @@ class SemiAutoHideScoutBot : public virtual SemiAutoBot, public virtual HideBot,
 public:
     SemiAutoHideScoutBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield), ScoutBot(name, x, y, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Hide + Scout" << endl;
         SemiAutoBot::displayStats();
@@ -174,7 +173,6 @@ class SemiAutoHideTrackBot : public virtual SemiAutoBot, public virtual HideBot,
 public:
     SemiAutoHideTrackBot(const string& name, int x, int y, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, x, y, w, h, battlefield), SemiAutoBot(name, x, y, w, h, battlefield), HideBot(name, x, y, w, h, battlefield), TrackBot(name, x, y, w, h, battlefield) {}
-    // think() removed
     void displayStats() const override {
         cout << "Upgrade: SemiAuto + Hide + Track" << endl;
         SemiAutoBot::displayStats();
