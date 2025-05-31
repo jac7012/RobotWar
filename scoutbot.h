@@ -65,8 +65,7 @@ public:
 class ScoutThirtyShotBot : public virtual ScoutBot, public virtual ThirtyShotBot {
 public:
     ScoutThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield), 
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
 
     void displayStats() const override {
@@ -80,8 +79,7 @@ public:
 class ScoutSemiAutoBot : public virtual ScoutBot, public virtual SemiAutoBot {
 public:
     ScoutSemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           SemiAutoBot(name, startX, startY, w, h, battlefield) {}
 
     void displayStats() const override {
@@ -95,8 +93,7 @@ public:
 class ScoutLongShotBot : public virtual ScoutBot, public virtual LongShotBot {
 public:
     ScoutLongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
 
     void fire(int x, int y) {
@@ -114,8 +111,7 @@ public:
 class ScoutJumpBot : public virtual ScoutBot, public virtual JumpBot {
 public:
     ScoutJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
 
     void displayStats() const override {
@@ -129,8 +125,7 @@ public:
 class ScoutHideBot : public virtual ScoutBot, public virtual HideBot {
 public:
     ScoutHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
 
     void displayStats() const override {
@@ -144,8 +139,7 @@ public:
 class ScoutLongShotJumpBot : public virtual ScoutBot, public virtual LongShotBot, public virtual JumpBot {
 public:
     ScoutLongShotJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
 
@@ -161,8 +155,7 @@ public:
 class ScoutSemiAutoJumpBot : public virtual ScoutBot, public virtual SemiAutoBot, public virtual JumpBot {
 public:
     ScoutSemiAutoJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           SemiAutoBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
 
@@ -178,8 +171,7 @@ public:
 class ScoutThirtyShotJumpBot : public virtual ScoutBot, public virtual ThirtyShotBot, public virtual JumpBot {
 public:
     ScoutThirtyShotJumpBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield) {}
 
@@ -195,8 +187,7 @@ public:
 class ScoutLongShotHideBot : public virtual ScoutBot, public virtual LongShotBot, public virtual HideBot {
 public:
     ScoutLongShotHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
 
@@ -212,8 +203,7 @@ public:
 class ScoutSemiAutoHideBot : public virtual ScoutBot, public virtual SemiAutoBot, public virtual HideBot {
 public:
     ScoutSemiAutoHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           SemiAutoBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
 
@@ -229,8 +219,7 @@ public:
 class ScoutThirtyShotHideBot : public virtual ScoutBot, public virtual ThirtyShotBot, public virtual HideBot {
 public:
     ScoutThirtyShotHideBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield) {}
 
@@ -246,8 +235,7 @@ public:
 class ScoutJumpLongShotBot : public virtual ScoutBot, public virtual JumpBot, public virtual LongShotBot {
 public:
     ScoutJumpLongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
 
@@ -263,8 +251,7 @@ public:
 class ScoutJumpSemiAutoBot : public virtual ScoutBot, public virtual JumpBot, public virtual SemiAutoBot {
 public:
     ScoutJumpSemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield),
           SemiAutoBot(name, startX, startY, w, h, battlefield) {}
 
@@ -280,8 +267,7 @@ public:
 class ScoutJumpThirtyShotBot : public virtual ScoutBot, public virtual JumpBot, public virtual ThirtyShotBot {
 public:
     ScoutJumpThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           JumpBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
 
@@ -297,8 +283,7 @@ public:
 class ScoutHideLongShotBot : public virtual ScoutBot, public virtual HideBot, public virtual LongShotBot {
 public:
     ScoutHideLongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield),
           LongShotBot(name, startX, startY, w, h, battlefield) {}
 
@@ -314,8 +299,7 @@ public:
 class ScoutHideSemiAutoBot : public virtual ScoutBot, public virtual HideBot, public virtual SemiAutoBot {
 public:
     ScoutHideSemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield),
           SemiAutoBot(name, startX, startY, w, h, battlefield) {}
 
@@ -331,8 +315,7 @@ public:
 class ScoutHideThirtyShotBot : public virtual ScoutBot, public virtual HideBot, public virtual ThirtyShotBot {
 public:
     ScoutHideThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
+        : ScoutBot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
 
