@@ -13,6 +13,15 @@
 #ifndef JUMPBOT_H
 #define JUMPBOT_H
 
+
+class TrackBot;
+class ThirtyShotBot;
+class SemiAutoBot;
+class HideBot;
+class LongShotBot;
+class ScoutBot;
+class GenericRobot;
+
 #include "genericrobot.h"
 #include "battlefield.h"
 #include "Constants.h"
