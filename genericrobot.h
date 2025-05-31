@@ -340,9 +340,3 @@ class GenericRobot: public virtual Robot,
 
 
 #endif
-
-/*
-main cpp,
-srand((unsigned int)time(nullptr)); // for initial random
-
-*/
