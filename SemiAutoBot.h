@@ -13,14 +13,16 @@
 #ifndef SEMIAUTOBOT_H
 #define SEMIAUTOBOT_H
 
-#include "GenericRobot.h"
-#include "JumpBot.h"
-#include "TrackBot.h"   
-#include "ThirtyShotBot.h"
-#include "ScoutBot.h"
-#include "HideBot.h"
-#include "LongShotBot.h"
+
+#include "genericrobot.h"
+#include "battlefield.h"
 #include "Constants.h"
+#include "trackbot.h"
+#include "thirtyshotbot.h"
+#include "LongShotBot.h"
+#include "HideBot.h"
+#include "scoutbot.h"
+#include "JumpBot.h"
 
 class SemiAutoBot : public virtual GenericRobot {
 public:
@@ -45,7 +47,7 @@ public:
         int targetX = pos.robotPositionX + x;
         int targetY = pos.robotPositionY + y;
 
-        Battlefield* bf = this->battlefield;
+        Battlefield* bf = this->getBattlefield();
         if (!bf) return;
 
         if (targetX < 0 || targetX >= bf->getWidth() ||
