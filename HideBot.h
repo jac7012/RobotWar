@@ -13,6 +13,15 @@
 #ifndef HIDEBOT_H
 #define HIDEBOT_H
 
+
+class TrackBot;
+class ThirtyShotBot;
+class SemiAutoBot;
+class JumpBot;
+class LongShotBot;
+class ScoutBot;
+class GenericRobot;
+
 #include "genericrobot.h"
 #include "LongShotBot.h"
 #include "SemiAutoBot.h"
