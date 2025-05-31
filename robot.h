@@ -13,9 +13,8 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-
+#include "Constants.h"
 #include <iostream>
-#include <Constants.h>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
