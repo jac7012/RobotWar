@@ -268,9 +268,9 @@ public:
 };
 
 // Hide + ThirtyShot + Track
-class HideThirtyShotScoutBot : public virtual HideBot, public virtual ThirtyShotBot, public virtual TrackBot {
+class HideThirtyShotTrackBot : public virtual HideBot, public virtual ThirtyShotBot, public virtual TrackBot {
 public:
-    HideThirtyShotScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
+    HideThirtyShotTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
         : GenericRobot(name, startX, startY, w, h, battlefield),
           HideBot(name, startX, startY, w, h, battlefield),
           ThirtyShotBot(name, startX, startY, w, h, battlefield),
