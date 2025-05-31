@@ -13,68 +13,104 @@
 #define UTILITIES_H
 
 #include "Constants.h"
+#include "battlefield.h"
+#include <iostream>
+#include <vector>
+#include <string>
 #include <cstdlib>
 #include <ctime>
-#include <vector>
-#include <algorithm>
 
-class Utilities {
-public:
-    // Initialize random seed
-    static void initRandom() {
+using namespace std;
+
+namespace Utilities {
+    inline void initRandom() {
         srand(static_cast<unsigned>(time(nullptr)));
     }
-
-    // Generate random number between min and max (inclusive)
-    static int randomInt(int min, int max) {
+    
+    inline int randomInt(int min, int max) {
         return min + (rand() % (max - min + 1));
     }
-
-    // Calculate distance between two positions
-    static int calculateDistance(const Position& pos1, const Position& pos2) {
-        return abs(pos1.robotPositionX - pos2.robotPositionX) + 
-               abs(pos1.robotPositionY - pos2.robotPositionY);
+    
+    inline bool isInBounds(int x, int y, const Battlefield& battlefield) {
+        return x >= 0 && x < battlefield.getWidth() && 
+               y >= 0 && y < battlefield.getHeight();
     }
-
-    // Check if position is valid on battlefield
-    static bool isValidPosition(const Position& pos, int width, int height) {
-        return (pos.robotPositionX >= 0 && pos.robotPositionX < width &&
-                pos.robotPositionY >= 0 && pos.robotPositionY < height);
+    
+    inline int calculateDistance(const Position& pos1, const Position& pos2) {
+        int dx = pos1.robotPositionX - pos2.robotPositionX;
+        int dy = pos1.robotPositionY - pos2.robotPositionY;
+        return abs(dx) + abs(dy);
     }
-
-    // Convert direction enum to string
-    static string directionToString(Direction dir) {
-        switch (dir) {
-            case UP: return "Up";
-            case DOWN: return "Down";
-            case LEFT: return "Left";
-            case RIGHT: return "Right";
-            case UP_LEFT: return "Up-Left";
-            case UP_RIGHT: return "Up-Right";
-            case DOWN_LEFT: return "Down-Left";
-            case DOWN_RIGHT: return "Down-Right";
-            case NONE: return "None";
-            default: return "Unknown";
+    
+    enum Direction {
+        UP, UP_LEFT, UP_RIGHT, 
+        LEFT, RIGHT, 
+        DOWN, DOWN_LEFT, DOWN_RIGHT
+    };
+    
+    inline Position directionToOffset(Direction dir) {
+        switch(dir) {
+            case UP: return {0, 1};
+            case UP_LEFT: return {-1, 1};
+            case UP_RIGHT: return {1, 1};
+            case LEFT: return {-1, 0};
+            case RIGHT: return {1, 0};
+            case DOWN: return {0, -1};
+            case DOWN_LEFT: return {-1, -1};
+            case DOWN_RIGHT: return {1, -1};
+            default: return {0, 0};
         }
     }
-
-    // Convert robot type to string
-    static string robotTypeToString(RobotType type) {
-        switch (type) {
-            case GENERIC_ROBOT: return "GenericRobot";
-            case FIRE_ROBOT: return "FireRobot";
-            case RECON_ROBOT: return "ReconRobot";
-            case FAST_ROBOT: return "FastRobot";
-            case JUMP_BOT: return "JumpBot";
-            case LONG_SHOT_BOT: return "LongShotBot";
-            case SEMI_AUTO_BOT: return "SemiAutoBot";
-            case THIRTY_SHOT_BOT: return "ThirtyShotBot";
-            case SCOUT_BOT: return "ScoutBot";
-            case TRACK_BOT: return "TrackBot";
-            case HIDE_BOT: return "HideBot";
-            default: return "Unknown";
+    
+    inline bool parseInputFile(const string& filename, 
+                             int& width, int& height,
+                             int& maxSteps,
+                             vector<pair<string, Position>>& robotInitials) {
+        ifstream file(filename);
+        if (!file.is_open()) {
+            cerr << "Error: Could not open input file " << filename << endl;
+            return false;
         }
+        
+        string line;
+        while (getline(file, line)) {
+            if (line.find("M by N") != string::npos) {
+                string dummy;
+                istringstream iss(line);
+                iss >> dummy >> dummy >> dummy >> width >> height;
+            } 
+            else if (line.find("steps:") != string::npos) {
+                istringstream iss(line);
+                string dummy;
+                iss >> dummy >> maxSteps;
+            }
+            else if (line.find("robots:") != string::npos) {
+                continue;
+            }
+            else if (!line.empty() && isalpha(line[0])) {
+                istringstream iss(line);
+                string type, name, xStr, yStr;
+                iss >> type >> name >> xStr >> yStr;
+                
+                Position pos;
+                if (xStr == "random") {
+                    pos.robotPositionX = randomInt(0, width-1);
+                } else {
+                    pos.robotPositionX = stoi(xStr);
+                }
+                
+                if (yStr == "random") {
+                    pos.robotPositionY = randomInt(0, height-1);
+                } else {
+                    pos.robotPositionY = stoi(yStr);
+                }
+                
+                robotInitials.emplace_back(type + " " + name, pos);
+            }
+        }
+        
+        file.close();
+        return true;
     }
 };
-
-#endif // UTILITIES_H
+#endif
