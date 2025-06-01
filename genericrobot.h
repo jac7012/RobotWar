@@ -1,21 +1,10 @@
-/**********|**********|**********|
- Program: genericrobot.h
- Course: OOPDS
- Trimester: 2510
- Name: Bianca Lau Ying Xuan
- ID: 242UC2426R
- Lecture Section: TC1L
- Tutorial Section: TT2L
- Email: BIANCA.LAU.YING@student.mmu.edu.my
- Phone: 010-2752246
-  **********|**********|**********/
-
 #ifndef GENERICROBOT_H
 #define GENERICROBOT_H
 
 #include "robot.h"
 #include "battlefield.h"
 #include "Constants.h"
+#include "position.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -118,7 +107,7 @@ class GenericRobot: public virtual Robot,
             {
                 int lookX = (rand()%3) -1;
                 int lookY = (rand()%3) -1;
-                look(lookX, lookY);
+                look(*battlefield, lookX, lookY);
                 hasLooked = true;
             }
 
@@ -132,7 +121,7 @@ class GenericRobot: public virtual Robot,
                     fireY = (rand()%3) -1;
                 }
                 while (fireX == 0 && fireY == 0);
-                fire(fireX, fireY);
+                fire(*battlefield, fireX, fireY);
                 hasFired = true;
             }
 
@@ -140,13 +129,16 @@ class GenericRobot: public virtual Robot,
             if (!hasMoved)
             {
                 int direction = rand()%8;
-                move(direction);
+                // Convert direction to x and y offsets (8 directions)
+                int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
+                int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+                move(*battlefield, pos.robotPositionX + dx[direction], pos.robotPositionY + dy[direction]);
                 hasMoved = true;
             }
         }
 
-        virtual void think() override       // if shell runs out, robot will self destruct
-        {
+        // Remove pure virtuals from GenericRobot to make it concrete
+        virtual void think() override {
             if (shells <= 0)
             {
                cout << name << " has no shells left. Self-destructed."<< endl ;
@@ -164,11 +156,10 @@ class GenericRobot: public virtual Robot,
             }
         }
 
-        //look around in the center position
-       virtual void look(int x, int y)
-       {
-           int centerX = pos.robotPositionX + x;   // center x and y
-           int centerY = pos.robotPositionY + y;
+        // Update look signature to match the base class
+        virtual void look(Battlefield& battlefield, int offsetX, int offsetY) override {
+           int centerX = pos.robotPositionX + offsetX;   // center x and y
+           int centerY = pos.robotPositionY + offsetY;
 
            cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")." << endl;
 
@@ -179,10 +170,10 @@ class GenericRobot: public virtual Robot,
                    int lookX = centerX + i;
                    int lookY = centerY + j;
 
-                   if (lookX >=0 && lookX < battlefield ->getWidth() &&     //// check if the position is inside battlefield
-                       lookY >=0 && lookY < battlefield ->getWidth())
+                   if (lookX >=0 && lookX < battlefield.getWidth() &&     //// check if the position is inside battlefield
+                       lookY >=0 && lookY < battlefield.getWidth())
                    {
-                       Robot* r = battlefield -> getRobotAt(lookX, lookY);
+                       Robot* r = battlefield.getRobotAt(lookX, lookY);
                        if (r!= nullptr)
                        {
                            cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
@@ -192,10 +183,7 @@ class GenericRobot: public virtual Robot,
            }
        }
 
-
-        // shoot the robot in the direction of x, y
-        virtual void fire(int x, int y) override
-       {
+        virtual void fire(Battlefield& battlefield, int x, int y) override {
            if (shells <=0)
            {
                return;      // no shells left, cannot shoot
@@ -213,19 +201,19 @@ class GenericRobot: public virtual Robot,
            int targetY = pos.robotPositionY + y;
 
            // check if target position is inside battlefield
-           if (targetX < 0 || targetX >= battlefield -> getWidth() ||
-               targetY < 0 || targetY >= battlefield -> getHeight())
+           if (targetX < 0 || targetX >= battlefield.getWidth() ||
+               targetY < 0 || targetY >= battlefield.getHeight())
                {
                    return;
                }
 
-            Robot* target = battlefield -> getRobotAt(targetX,targetY);
+            Robot* target = battlefield.getRobotAt(targetX,targetY);
             if (target != nullptr && target -> isAlive())        // robot not null and alive
             {
                 if(rand() % 100 < 70)
                 {
                     cout << name << " successfully hit " << target -> getName() << "." << endl;
-                    target -> takeDamage(name, battlefield);
+                    target -> takeDamage(name, &battlefield);
                 }
                 else
                 {
@@ -237,61 +225,12 @@ class GenericRobot: public virtual Robot,
             }
         }
 
-
-       Position calNewPosition(int direction)   // calculate new position based on direction
-       {
-           Position newPos = pos;      //start with current position
-           switch (direction)
+       virtual void move(Battlefield& battlefield, int x, int y) override {
+           Position newPos = {x, y};
+           if (isValidMove(newPos))
            {
-               case 0: // Up
-                   newPos.robotPositionY+= 1;
-                   break;
-               case 1: // Left up
-                   newPos.robotPositionX-=1;
-                   newPos.robotPositionY+=1;
-                   break;
-               case 2: // Right up
-                   newPos.robotPositionX+=1;
-                   newPos.robotPositionY+=1;
-                   break;
-               case 3: // Left
-                   newPos.robotPositionX-=1;
-                   break;
-               case 4: // Right
-                   newPos.robotPositionX+=1;
-                   break;
-               case 5: // Down
-                   newPos.robotPositionY-=1;
-                   break;
-               case 6: // Left down
-                   newPos.robotPositionX-=1;
-                   newPos.robotPositionY-=1;
-                   break;
-               case 7: // Right down
-                   newPos.robotPositionX+=1;
-                   newPos.robotPositionY-=1;
-                   break;
-               default:
-                   break;
-           }
-           return newPos;
-       }
-
-       // Check if the new position is inside battlefield
-       bool isValidMove(Position p)
-       {
-           return (p.robotPositionX >= 0 && p.robotPositionX < battlefield ->getWidth() &&
-                   p.robotPositionY >= 0 && p.robotPositionY < battlefield ->getHeight() &&
-                   battlefield -> getRobotAt(p.robotPositionX,p.robotPositionY)== nullptr);
-       }
-
-       virtual void move(int direction) override
-       {
-           Position newPos = calNewPosition(direction);
-           if(isValidMove(newPos))
-           {
-               battlefield -> removeRobot(this); //remove the old position
-               battlefield -> placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
+               battlefield.removeRobot(this); //remove the old position
+               battlefield.placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
                setPosition(newPos.robotPositionX, newPos.robotPositionY);
                cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
            }
@@ -299,6 +238,19 @@ class GenericRobot: public virtual Robot,
            {
                cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
            }
+       }
+
+       // Add this helper function to check if a move is valid
+       bool isValidMove(const Position& pos) const {
+           if (!battlefield) return false;
+           int width = battlefield->getWidth();
+           int height = battlefield->getHeight();
+           // Check if position is within battlefield bounds and not occupied
+           if (pos.robotPositionX < 0 || pos.robotPositionX >= width ||
+               pos.robotPositionY < 0 || pos.robotPositionY >= height)
+               return false;
+           Robot* r = battlefield->getRobotAt(pos.robotPositionX, pos.robotPositionY);
+           return (r == nullptr || r == this);
        }
        
        void chooseSeeingUpgrade(const string& upgradeName) {
@@ -336,7 +288,4 @@ class GenericRobot: public virtual Robot,
     
 
 };
-
-
-
 #endif

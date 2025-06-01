@@ -1,15 +1,3 @@
-/**********|**********|**********|
- Program: firerobot.h
- Course: OOPDS
- Trimester: 2510
- Name: Bianca Lau Ying Xuan
- ID: 242UC2426R
- Lecture Section: TC1L
- Tutorial Section: TT2L
- Email: BIANCA.LAU.YING@student.mmu.edu.my
- Phone: 010-2752246
-  **********|**********|**********/
-
 #ifndef FIREROBOT_H
 #define FIREROBOT_H
 
@@ -26,7 +14,7 @@
 
 //can shoot anywhere in the battlefield
 
-class FireRobot: public Robot, public ShootingRobot
+class FireRobot: public virtual Robot, public ShootingRobot
 {
     private:
         Battlefield* battlefield;   // to access robot position
@@ -55,51 +43,49 @@ class FireRobot: public Robot, public ShootingRobot
             // 1. Fire
             if (!hasFired)
             {
-                fire(0,0);      // pass parameters, but not actually use
+                fire(*battlefield, 0, 0);      // pass battlefield reference and dummy coordinates
                 hasFired = true;
             }
         }
 
 
         // shoot the robot
-         virtual void fire(int x, int y) override
-
-       {
-           if (shells <=0)
-           return;  // no shells left, cannot shoot
+        virtual void fire(Battlefield& battlefield, int x, int y) override
+        {
+           if (shells <= 0)
+               return;  // no shells left, cannot shoot
 
            shells--;
 
-          int targetX, targetY;
+           int targetX, targetY;
+           do {
+               targetX = rand() % battlefield.getWidth();
+               targetY = rand() % battlefield.getHeight();
+           } while (targetX == pos.robotPositionX && targetY == pos.robotPositionY);  // shoot at a random position and cannot shoot at self
 
-          do
-          {
-              targetX = rand() % battlefield -> getWidth();
-              targetY = rand() % battlefield-> getHeight();
-          }
-          while (targetX == pos.robotPositionX && targetY == pos.robotPositionY);  // shoot at a random position and cannot shoot at self
+           Robot* target = battlefield.getRobotAt(targetX, targetY);
 
-
-          Robot* target = battlefield -> getRobotAt(targetX,targetY);
-
-          if (target != nullptr && target -> isAlive())        // robot not null and alive
-          {
-              if(rand() % 100 < 70)
-              {
-                  std::cout << name << " successfully hit " << target -> getName() << "." << endl;
-                  target -> takeDamage(name, battlefield);
-              }
-              else
-              {
-                  std::cout << name << " missed the shot at " << target -> getName() << "." << endl;
-              }
-          }
-          else
-          {
-              std::cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << endl;    //when the target is null and the target robot not alive
-          }
+           if (target != nullptr && target->isAlive())        // robot not null and alive
+           {
+               if (rand() % 100 < 70)
+               {
+                   std::cout << name << " successfully hit " << target->getName() << "." << std::endl;
+                   target->takeDamage(name, &battlefield);
+               }
+               else
+               {
+                   std::cout << name << " missed the shot at " << target->getName() << "." << std::endl;
+               }
+           }
+           else
+           {
+               std::cout << name << " fired at (" << targetX << ", " << targetY << ") but no target." << std::endl;
+           }
         }
 
+        void think() override {
+            performTurn();
+        }
 };
 
 #endif

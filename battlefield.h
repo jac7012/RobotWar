@@ -1,18 +1,7 @@
-/**********|**********|**********|
- Program: battlefield.h
- Course: OOPDS
- Trimester: 2510
- Name: Bianca Lau Ying Xuan
- ID: 242UC2426R
- Lecture Section: TC1L
- Tutorial Section: TT2L
- Email: BIANCA.LAU.YING@student.mmu.edu.my
- Phone: 010-2752246
-  **********|**********|**********/
-
 #ifndef BATTLEFIELD_H
 #define BATTLEFIELD_H
 
+#include "position.h"
 #include "robot.h"
 #include <vector>
 #include <string>
@@ -52,11 +41,8 @@ public:
     // Getter for battlefield height
     int getHeight() const { return height; }
 
-    // Add this declaration for display manager access
-    Robot* getRobotAt(int x, int y) const;
-
     //for upgrades
-    Robot* getRobotAt(int x, int y) {
+    Robot* getRobotAt(int x, int y) const {
        if(!isInBounds(x, y))
           return nullptr;
 

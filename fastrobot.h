@@ -1,21 +1,9 @@
-/**********|**********|**********|
- Program: fastrobot.h
- Course: OOPDS
- Trimester: 2510
- Name: Bianca Lau Ying Xuan
- ID: 242UC2426R
- Lecture Section: TC1L
- Tutorial Section: TT2L
- Email: BIANCA.LAU.YING@student.mmu.edu.my
- Phone: 010-2752246
-  **********|**********|**********/
-
 #ifndef FASTROBOT_H
 #define FASTROBOT_H
 
 #include "robot.h"
 #include "battlefield.h"
-#include "scoutbot.h"
+#include "ScoutBot.h"
 #include "Constants.h"
 
 #include <iostream>
@@ -26,7 +14,7 @@
 using namespace std;
 
 // can look bigger (5x5) and only move 2 direction (left and right )
-class FastRobot: public Robot, public SeeingRobot, public MovingRobot
+class FastRobot: public virtual Robot, public SeeingRobot, public MovingRobot
 {
     private:
         Battlefield* battlefield;   // to access robot position
@@ -50,52 +38,41 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
         }
 
         // each round(step) action execution, cannot repeat, follow look-move
-        void performTurn()
-        {
+        void performTurn() {
             resetTurnFlags();
 
             // 1. look
-            if (!hasLooked)
-            {
+            if (!hasLooked) {
                 int lookX = (rand()%3) -1;
                 int lookY = (rand()%3) -1;
-                look(lookX, lookY);
+                look(*battlefield, lookX, lookY);
                 hasLooked = true;
             }
 
             // 2. Move
-            if (!hasMoved)
-            {
+            if (!hasMoved) {
                 int direction = rand()%2;
-                move(direction);
+                Position newPos = calNewPosition(direction);
+                move(*battlefield, newPos.robotPositionX, newPos.robotPositionY);
                 hasMoved = true;
             }
         }
 
 
 
-       //look around in the center position
-       virtual void look(int x, int y)
-       {
-           int centerX = pos.robotPositionX + x;   // center x and y
-           int centerY = pos.robotPositionY + y;
-
+       void look(Battlefield& battlefield, int offsetX, int offsetY) override {
+           int centerX = pos.robotPositionX + offsetX;
+           int centerY = pos.robotPositionY + offsetY;
            cout << name << " is looking at area centered at (" << centerX << ", " << centerY << ")." << endl;
-
-           for (int i = -2; i <= 2; ++i)   // check surrounding position
-           {
-               for (int j = -2; j <= 2; ++j)
-               {
+           for (int i = -2; i <= 2; ++i) {
+               for (int j = -2; j <= 2; ++j) {
                    int lookX = centerX + i;
                    int lookY = centerY + j;
-
-                   if (lookX >=0 && lookX < battlefield ->getWidth() &&     //// check if the position is inside battlefield
-                       lookY >=0 && lookY < battlefield ->getHeight())
-                   {
-                       Robot* r = battlefield -> getRobotAt(lookX, lookY);
-                       if (r!= nullptr)
-                       {
-                           cout << " - Robot " << r -> getName() << " at (" << lookX << ", " << lookY << ")" << endl;
+                   if (lookX >= 0 && lookX < battlefield.getWidth() &&
+                       lookY >= 0 && lookY < battlefield.getHeight()) {
+                       Robot* r = battlefield.getRobotAt(lookX, lookY);
+                       if (r != nullptr) {
+                           cout << " - Robot " << r->getName() << " at (" << lookX << ", " << lookY << ")" << endl;
                        }
                    }
                }
@@ -126,13 +103,13 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
                    p.robotPositionY >= 0 && p.robotPositionY < battlefield ->getHeight());
        }
 
-       virtual void move(int direction) override
+       virtual void move(Battlefield& battlefield, int x, int y) override
        {
-           Position newPos = calNewPosition(direction);
-           if(isValidMove(newPos))
+           Position newPos = {x, y};
+           if (isValidMove(newPos))
            {
-               battlefield -> removeRobot(this); //remove the old position
-               battlefield -> placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
+               battlefield.removeRobot(this); //remove the old position
+               battlefield.placeRobot(this, newPos.robotPositionX, newPos.robotPositionY); //place the new position
                setPosition(newPos.robotPositionX, newPos.robotPositionY);
                cout << name << " moved to (" << getX() << ", " << getY() << ")." << endl;
            }
@@ -140,7 +117,19 @@ class FastRobot: public Robot, public SeeingRobot, public MovingRobot
            {
                cout << name << " invalid move, keep position (" << getX() << ", " << getY() << ")." << endl;
            }
-           }
+       }
+
+       void displayStats() const {
+        cout << "FastRobot: " << name << " at (" << pos.robotPositionX << ", " << pos.robotPositionY << ")\n";
+    }
+       void think() override {
+        // FastRobot does not use advanced thinking logic
+        // Could be used for future upgrades
+    }
+
+    void fire(Battlefield& battlefield, int x, int y) {
+        // FastRobot does not shoot, so this is a no-op
+    }
        };
 
 #endif
