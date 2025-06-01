@@ -68,266 +68,28 @@ public:
     }
 };
 
-
-// Jump + LongShot
-class JumpLongShotBot : public virtual JumpBot, public virtual LongShotBot {
-public:
-    JumpLongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          LongShotBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + LongShot" << endl;
-        JumpBot::displayStats();
-        LongShotBot::displayStats();
-    }
-};
-
-// Jump + Scout
-class JumpScoutBot : public virtual JumpBot, public virtual ScoutBot {
-public:
-    JumpScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Scout" << endl;
-        JumpBot::displayStats();
-        ScoutBot::displayStats();
-    }
-};
-
-// Jump + Track
-class JumpTrackBot : public virtual JumpBot, public virtual TrackBot {
-public:
-    JumpTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Track" << endl;
-        JumpBot::displayStats();
-        TrackBot::displayStats();
-    }
-};
-
-// Jump + ThirtyShot
-class JumpThirtyShotBot : public virtual JumpBot, public virtual ThirtyShotBot {
-public:
-    JumpThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + ThirtyShot" << endl;
-        JumpBot::displayStats();
-        ThirtyShotBot::displayStats();
-    }
-};
-
-// Jump + SemiAuto
-class JumpSemiAutoBot : public virtual JumpBot, public virtual SemiAutoBot {
-public:
-    JumpSemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          SemiAutoBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + SemiAuto" << endl;
-        JumpBot::displayStats();
-        SemiAutoBot::displayStats();
-    }
-};
-
 // Jump + Track + ThirtyShot
-class JumpTrackThirtyShotBot : public virtual JumpBot, public virtual TrackBot, public virtual ThirtyShotBot {
-public:
-    JumpTrackThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield),
-          ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Track + ThirtyShot" << endl;
-        JumpBot::displayStats();
-        TrackBot::displayStats();
-        ThirtyShotBot::displayStats();
-    }
-};
-
+// (moved to JumpTrackThirtyShotBot.h)
 // Jump + Track + SemiAuto
-class JumpTrackSemiAutoBot : public virtual JumpBot, public virtual TrackBot, public virtual SemiAutoBot {
-public:
-    JumpTrackSemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield),
-          SemiAutoBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Track + SemiAuto" << endl;
-        JumpBot::displayStats();
-        TrackBot::displayStats();
-        SemiAutoBot::displayStats();
-    }
-};
-
+// (moved to JumpTrackSemiAutoBot.h)
 // Jump + Track + LongShot
-class JumpTrackLongShotBot : public virtual JumpBot, public virtual TrackBot, public virtual LongShotBot {
-public:
-    JumpTrackLongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield),
-          LongShotBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Track + LongShot" << endl;
-        JumpBot::displayStats();
-        TrackBot::displayStats();
-        LongShotBot::displayStats();
-    }
-};
-
+// (moved to JumpTrackLongShotBot.h)
 // Jump + Scout + LongShot
-class JumpScoutLongShotBot : public virtual JumpBot, public virtual ScoutBot, public virtual LongShotBot {
-public:
-    JumpScoutLongShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
-          LongShotBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Scout + LongShot" << endl;
-        JumpBot::displayStats();
-        ScoutBot::displayStats();
-        LongShotBot::displayStats();
-    }
-};
-
+// (moved to JumpScoutLongShotBot.h)
 // Jump + Scout + SemiAuto
-class JumpScoutSemiAutoBot : public virtual JumpBot, public virtual ScoutBot, public virtual SemiAutoBot {
-public:
-    JumpScoutSemiAutoBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
-          SemiAutoBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Scout + SemiAuto" << endl;
-        JumpBot::displayStats();
-        ScoutBot::displayStats();
-        SemiAutoBot::displayStats();
-    }
-};
-
+// (moved to JumpScoutSemiAutoBot.h)
 // Jump + Scout + ThirtyShot
-class JumpScoutThirtyShotBot : public virtual JumpBot, public virtual ScoutBot, public virtual ThirtyShotBot {
-public:
-    JumpScoutThirtyShotBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield),
-          ThirtyShotBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + Scout + ThirtyShot" << endl;
-        JumpBot::displayStats();
-        ScoutBot::displayStats();
-        ThirtyShotBot::displayStats();
-    }
-};
-
+// (moved to JumpScoutThirtyShotBot.h)
 // Jump + LongShot + Scout
-class JumpLongShotScoutBot : public virtual JumpBot, public virtual LongShotBot, public virtual ScoutBot {
-public:
-    JumpLongShotScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          LongShotBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + LongShot + Scout" << endl;
-        JumpBot::displayStats();
-        LongShotBot::displayStats();
-        ScoutBot::displayStats();
-    }
-};
-
+// (moved to JumpLongShotScoutBot.h)
 // Jump + LongShot + Track
-class JumpLongShotTrackBot : public virtual JumpBot, public virtual LongShotBot, public virtual TrackBot {
-public:
-    JumpLongShotTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          LongShotBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + LongShot + Track" << endl;
-        JumpBot::displayStats();
-        LongShotBot::displayStats();
-        TrackBot::displayStats();
-    }
-};
-
+// (moved to JumpLongShotTrackBot.h)
 // Jump + SemiAuto + Scout
-class JumpSemiAutoScoutBot : public virtual JumpBot, public virtual SemiAutoBot, public virtual ScoutBot {
-public:
-    JumpSemiAutoScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          SemiAutoBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + SemiAuto + Scout" << endl;
-        JumpBot::displayStats();
-        SemiAutoBot::displayStats();
-        ScoutBot::displayStats();
-    }
-};
-
+// (moved to JumpSemiAutoScoutBot.h)
 // Jump + SemiAuto + Track
-class JumpSemiAutoTrackBot : public virtual JumpBot, public virtual SemiAutoBot, public virtual TrackBot {
-public:
-    JumpSemiAutoTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          SemiAutoBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + SemiAuto + Track" << endl;
-        JumpBot::displayStats();
-        SemiAutoBot::displayStats();
-        TrackBot::displayStats();
-    }
-};
-
+// (moved to JumpSemiAutoTrackBot.h)
 // Jump + ThirtyShot + Scout
-class JumpThirtyShotScoutBot : public virtual JumpBot, public virtual ThirtyShotBot, public virtual ScoutBot {
-public:
-    JumpThirtyShotScoutBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ThirtyShotBot(name, startX, startY, w, h, battlefield),
-          ScoutBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + ThirtyShot + Scout" << endl;
-        JumpBot::displayStats();
-        ThirtyShotBot::displayStats();
-        ScoutBot::displayStats();
-    }
-};
-
+// (moved to JumpThirtyShotScoutBot.h)
 // Jump + ThirtyShot + Track
-class JumpThirtyShotTrackBot : public virtual JumpBot, public virtual ThirtyShotBot, public virtual TrackBot {
-public:
-    JumpThirtyShotTrackBot(const string& name, int startX, int startY, int w, int h, Battlefield* battlefield)
-        : GenericRobot(name, startX, startY, w, h, battlefield),
-          JumpBot(name, startX, startY, w, h, battlefield),
-          ThirtyShotBot(name, startX, startY, w, h, battlefield),
-          TrackBot(name, startX, startY, w, h, battlefield) {}
-    void displayStats() const override {
-        cout << "Upgrade: Jump + ThirtyShot + Track" << endl;
-        JumpBot::displayStats();
-        ThirtyShotBot::displayStats();
-        TrackBot::displayStats();
-    }
-};
+// (moved to JumpThirtyShotTrackBot.h)
 
