@@ -13,21 +13,17 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include "battlefield.h"  
 #include "Constants.h"
+#include "position.h"
+#include "battlefield.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
 #include <string>
+using namespace std;
 
 class Battlefield; // Forward declaration
-
-struct Position           // Position to hold coordinate (x, y)
-{
-    int robotPositionX;
-    int robotPositionY;
-};
 
 // base class Robot
 class Robot
@@ -59,7 +55,6 @@ class Robot
       battlefieldHeight(h),
       alive(true){}
 
-      virtual ~Robot() = default;
 
       // Set the robot's position for battlefield control
       void setPosition(int x, int y)
@@ -140,29 +135,83 @@ class Robot
            std:: cout <<name << "has respawned at (" << pos.robotPositionX
            << ", " << pos.robotPositionY << "). " << endl;
        }
-
+       virtual void think() = 0; // pure virtual function for thinking logic
+       virtual ~Robot() = default; // virtual destructor
 };
 
-class MovingRobot {
+class MovingRobot : virtual public Robot {
+protected:
+    int moveRange = 1;   // Default move range
+    int jumpCount = 0;   // Number of jumps available
+    int hideCount = 0;   // Number of hides available
+
 public:
-    virtual void move(int direction) = 0;
+    // Move the robot to a new position (x, y) if within moveRange
+    virtual void move(Battlefield& battlefield, int x, int y) = 0;
+
+    // Check if the robot can jump
+    virtual bool canJump() const { return jumpCount > 0; }
+
+    // Perform a jump to a new position if allowed
+    virtual void jump(Battlefield& battlefield, int x, int y) {
+        if (canJump()) {
+            setPosition(x, y);
+            jumpCount--;
+        }
+    }
+
+    // Check if the robot can hide
+    virtual bool canHide() const { return hideCount > 0; }
+
     virtual ~MovingRobot() {}
 };
 
-class ShootingRobot {
+class ShootingRobot: virtual public Robot {
+protected:
+    int shells = 10;
+    int fireRange = 1;
+    bool semiAuto = false;
 public:
-    virtual void fire(int dx, int dy) = 0;
+    // Check if the robot can fire
+    virtual bool canFire() const { return shells > 0; }
+    // Fire at a target position (x, y) on the battlefield
+    virtual void fire(Battlefield& battlefield, int x, int y) = 0;
+    // Get the number of shells left
+    int getShells() const { return shells; }
     virtual ~ShootingRobot() {}
 };
 
-class SeeingRobot {
+class SeeingRobot : virtual public Robot {
+protected:
+    int visionRange = 1;
+    int scoutCount = 0;
+    int trackers = 0;
+    std::vector<std::pair<int, int>> trackedRobots;
 public:
-    virtual void look(int offsetX, int offsetY) = 0;
+    // Look at a position offset from the robot's current position
+    virtual void look(Battlefield& battlefield, int offsetX, int offsetY) = 0;
+    
+    // Check if the robot can scout
+    virtual bool canScout() const { return scoutCount > 0; }
+    // Perform a scout action
+    virtual void scout(Battlefield& battlefield) {}
+    // Check if the robot can track
+    virtual bool canTrack() const { return trackers > 0; }
+    // Track another robot by name
+    virtual void track(Battlefield& battlefield, const std::string& targetName) {}
     virtual ~SeeingRobot() {}
 };
 
-class ThinkingRobot {
+class ThinkingRobot : virtual public Robot {
+protected:
+    vector<string> upgrades;
 public:
+    // Analyse the battlefield
+    virtual void analyse(Battlefield& battlefield) {}
+    // Decide the next action
+    virtual void decideAction(Battlefield& battlefield) {}
+    // Get available upgrades
+    virtual vector<string> getAvailableUpgrades() const { return upgrades; }
     virtual void think() = 0;
     virtual ~ThinkingRobot() {}
 };
